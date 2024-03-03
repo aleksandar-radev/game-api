@@ -14,12 +14,24 @@ const pool = new Pool({
   database: 'animal_idle'
 });
 
+
 module.exports = {
   query: (text, params) => pool.query(text, params)
 };
-  
+
+
 app.get('/',  
-   (req, res) => res.send('Dockerizing Node Application')) 
+   (req, res) => {
+      
+const x = pool.query('SELECT NOW()', (err, res) => {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log(res.rows[0]);
+  }
+});
+return res.send('Dockerizing Node Application 1' + x)
+}) 
   
 app.listen(5000,  
    () => console.log(`⚡️[bootup]: Server is running at port: 5000`));
