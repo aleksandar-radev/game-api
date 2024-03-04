@@ -14,7 +14,7 @@ git reset --hard origin/main
 cd ~
 
 # Add the .env file to the project's root directory
-copy "${ENV_DIR}/.env.production" "${SCRIPT_DIR}"
+cp "${ENV_DIR}/.env.production" "${SCRIPT_DIR}"
 mv "${SCRIPT_DIR}/.env.production" "${SCRIPT_DIR}/.env"
 
 # Rebuild the Docker image for app1
