@@ -1,16 +1,31 @@
-import pg from 'pg';
-import config from 'config';
+import { Pool } from "pg";
 
-const database = new pg({
-  user: 'myuser',
-  password: 'mypassword',
-  host: 'localhost',
+// Use Pool for connection pooling (recommended for most scenarios)
+const database = new Pool({
+  user: "myuser",
+  password: "mypassword",
+  host: "localhost",
   port: 5432, // default Postgres port
-  database: 'mydatabase'
+  database: "mydatabase",
 });
 
-module.exports = {
-  query: (text, params) => database.query(text, params)
-};
+// Alternatively, if you prefer using Client for a single standalone connection:
+// import { Client } from 'pg';
+// const database = new Client({
+//   user: 'myuser',
+//   password: 'mypassword',
+//   host: 'localhost',
+//   port: 5432,
+//   database: 'mydatabase'
+// });
+// await database.connect();
 
-exports.database = database;
+export const query = (text: string, params?: Array<any>) =>
+  database.query(text, params);
+
+// Exporting the database instance if needed elsewhere
+export { database };
+
+export default {
+  query,
+};

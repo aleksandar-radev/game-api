@@ -1,17 +1,19 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import config from 'config';
-import db from './database/database';
-import routes from './routes';
+import express, { Express, Request, Response } from "express";
+import userRoutes from "./routes/userRoutes";
 
-const app = express();
+const app: Express = express();
+const PORT = process.env.PORT || 3000;
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use('/', routes);
+app.use(express.json());
 
-const port = process.env.PORT || config.server.port;
-app.listen(port);
-console.log('Node + Express REST API skeleton server started on port: ' + port);
+app.get("/", (req: Request, res: Response) => {
+  res.send("API is running...");
+});
 
-module.exports = app;
+app.use("/api/users", userRoutes);
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+export default app;
