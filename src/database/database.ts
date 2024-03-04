@@ -1,7 +1,7 @@
 import pg from 'pg';
 import config from 'config';
 
-const db = new pg({
+const database = new pg({
   user: 'myuser',
   password: 'mypassword',
   host: 'localhost',
@@ -10,7 +10,7 @@ const db = new pg({
 });
 
 module.exports = {
-  query: (text, params) => db.query(text, params)
+  query: (text, params) => database.query(text, params)
 };
 
-exports.db = db;
+exports.database = database;
