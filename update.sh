@@ -10,7 +10,7 @@ git reset --hard origin/main
 # Then navigate one directory up to where docker-compose.yml is expected to be
 cd ..
 
-mv ./env/.env.production "$(dirname "$0")"
+mv ./env/app1/.env.production "$(dirname "$0")"
 mv .env.production .env
 
 chmod ug+x update.sh
