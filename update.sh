@@ -10,10 +10,9 @@ git reset --hard origin/main
 # Then navigate one directory up to where docker-compose.yml is expected to be
 cd ..
 
+# Add the .env file to the project's root directory
 mv ./env/app1/.env.production "$(dirname "$0")"
 mv .env.production .env
-
-chmod ug+x update.sh
 
 # Rebuild the Docker image for app1
 docker-compose build app1
