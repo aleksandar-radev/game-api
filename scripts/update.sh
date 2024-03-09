@@ -24,11 +24,19 @@ if [ $ENVIRONMENT == "prod" ]; then
   fi
 fi
 
+
+# Navigate to the env's directory
+cd "${ENV_DIR}"
+
+# Pull the latest changes from Git for ENV
+git fetch
+git reset --hard origin/main
+
 # Environment-specific actions
 if [ $ENVIRONMENT == "dev" ]; then
   COMPOSE_FILE=$DEV_COMPOSE_FILE
   COMPOSE_SERVICE="app1-dev"
-  ENV_FILE=".env.dev"
+  ENV_FILE=".env.development"
 else
   COMPOSE_FILE=$PROD_COMPOSE_FILE
   COMPOSE_SERVICE="app1"
