@@ -1,6 +1,5 @@
 import * as dotenv from "dotenv";
 dotenv.config();
-console.log(process.env);
 
 interface KnexConfig {
   [key: string]: {
