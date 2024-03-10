@@ -32,5 +32,5 @@ RUN adduser -D myuser
 USER myuser
 
 # Use an ENTRYPOINT script to run commands
-ENTRYPOINT ["/bin/sh", "-c", "printenv && ls -la && yarn migrate && yarn start"]
+ENTRYPOINT ["/bin/sh", "-c", "yarn migrate && yarn start"]
 
