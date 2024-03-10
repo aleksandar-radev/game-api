@@ -30,7 +30,7 @@ interface KnexConfig {
 const environment: string = process.env.ENV || "development";
 
 const config: KnexConfig = {
-  development: {
+  local: {
     client: "postgresql",
     connection: {
       host: process.env.DB_HOST!,
@@ -51,6 +51,27 @@ const config: KnexConfig = {
       directory: "./src/database/seeds", // Specify the seeds directory
     },
   },
+  development: {
+    client: "postgresql",
+    connection: {
+      host: process.env.DB_HOST!,
+      database: process.env.DB_NAME!,
+      user: process.env.DB_USER!,
+      password: process.env.DB_PASSWORD!,
+      port: parseInt(process.env.DB_PORT!),
+    },
+    pool: {
+      min: 2,
+      max: 10,
+    },
+    migrations: {
+      directory: "./dist/database/migrations",
+      tableName: "knex_migrations",
+    },
+    seeds: {
+      directory: "./dist/database/seeds", // Specify the seeds directory
+    },
+  },
 
   production: {
     client: "postgresql",
@@ -66,11 +87,11 @@ const config: KnexConfig = {
       max: 10,
     },
     migrations: {
-      directory: "./src/database/migrations",
+      directory: "./dist/database/migrations",
       tableName: "knex_migrations",
     },
     seeds: {
-      directory: "./src/database/seeds", // Specify the seeds directory
+      directory: "./dist/database/seeds", // Specify the seeds directory
     },
   },
 };
