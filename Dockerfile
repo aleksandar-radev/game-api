@@ -32,4 +32,4 @@ RUN adduser -D myuser
 USER myuser
 
 # Start the application
-CMD ["yarn", "start"]
+# CMD ["yarn", "start"]
