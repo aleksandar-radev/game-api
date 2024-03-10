@@ -4,7 +4,7 @@ FROM node:16.13.1-alpine3.14 as builder
 WORKDIR /usr/src/app
 
 # Copy package.json and yarn.lock files
-COPY ["package.json", "yarn.lock", "knexfile.ts", ".env", "./"]
+COPY ["package.json", "yarn.lock", ".env", "./"]
 
 # Install dependencies
 RUN yarn
@@ -22,7 +22,7 @@ WORKDIR /usr/src/app
 
 # Copy the build artifacts from the builder stage
 COPY --from=builder /usr/src/app/dist ./dist
-COPY ["package.json", "yarn.lock", "knexfile.ts", ".env", "./"]
+COPY ["package.json", "yarn.lock", ".env", "./"]
 
 # Install only production dependencies
 RUN yarn --production

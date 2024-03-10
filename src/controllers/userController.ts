@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
-import { query } from "../database/database";
+import db from "../database/database";
 // Mock users array
 const users = [{ id: 1, name: "John Doe" }];
 
-export const getUsers = (req: Request, res: Response) => {
-  const rows = query("SELECT * FROM users");
+export const getUsers = async (req: Request, res: Response) => {
+  const { rows } = await db.raw("SELECT * from users");
   console.log("xxx", rows);
 
-  res.json(users);
+  res.json(rows);
 };
 
 export const createUser = (req: Request, res: Response) => {
