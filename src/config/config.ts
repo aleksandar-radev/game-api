@@ -18,6 +18,7 @@ type Config = {
   };
 };
 
+// TODO check if will be used.
 const host: string = process.env.DB_HOST || "localhost";
 
 const configs: { [key: string]: Config } = {
@@ -42,7 +43,7 @@ const configs: { [key: string]: Config } = {
   },
 };
 
-const env = process.env.ENV || "dev";
+const env = process.env.ENV || "development";
 
 const selectedConfig = configs[env];
 if (!selectedConfig) {
