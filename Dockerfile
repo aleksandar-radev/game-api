@@ -31,6 +31,6 @@ RUN yarn --production
 RUN adduser -D myuser
 USER myuser
 
-# Use an ENTRYPOINT script to run commands
-ENTRYPOINT ["/bin/sh", "-c", "yarn migrate && yarn start"]
+# Start the application
+CMD ["yarn", "start"]
 

@@ -9,10 +9,6 @@ export async function up(knex: Knex): Promise<void> {
     t.timestamp("created_at").defaultTo(knex.fn.now());
     t.timestamp("updated_at").defaultTo(knex.fn.now());
   });
-
-  await knex.schema.alterTable("users", (t) => {
-    t.string("password").notNullable().alter();
-  });
 }
 
 export async function down(knex: Knex): Promise<void> {
