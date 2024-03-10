@@ -11,7 +11,7 @@ export async function up(knex: Knex): Promise<void> {
   });
 
   await knex.schema.alterTable("users", (t) => {
-    t.string("password").notNullable();
+    t.string("password").notNullable().alter();
   });
 }
 
