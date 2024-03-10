@@ -18,7 +18,11 @@ interface KnexConfig {
       max: number;
     };
     migrations: {
+      directory: string;
       tableName: string;
+    };
+    seeds: {
+      directory: string;
     };
   };
 }
@@ -40,7 +44,11 @@ const config: KnexConfig = {
       max: 10,
     },
     migrations: {
+      directory: "./src/database/migrations",
       tableName: "knex_migrations",
+    },
+    seeds: {
+      directory: "./src/database/seeds", // Specify the seeds directory
     },
   },
 
@@ -58,7 +66,11 @@ const config: KnexConfig = {
       max: 10,
     },
     migrations: {
+      directory: "./src/database/migrations",
       tableName: "knex_migrations",
+    },
+    seeds: {
+      directory: "./src/database/seeds", // Specify the seeds directory
     },
   },
 };

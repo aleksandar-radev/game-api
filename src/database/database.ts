@@ -1,12 +1,14 @@
 import { Pool } from "pg";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 // Use Pool for connection pooling (recommended for most scenarios)
 const database = new Pool({
-  user: "myuser",
-  password: "mypassword",
-  host: "localhost",
-  port: 5432, // default Postgres port
-  database: "mydatabase",
+  host: process.env.DB_HOST!,
+  database: process.env.DB_NAME!,
+  user: process.env.DB_USER!,
+  password: process.env.DB_PASSWORD!,
+  port: parseInt(process.env.DB_PORT!),
 });
 
 // Alternatively, if you prefer using Client for a single standalone connection:
