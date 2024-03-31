@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import logger from "../config/logger";
 
 const errorHandler = (
   err: Error,
@@ -15,6 +16,7 @@ const errorHandler = (
   } else if (err instanceof BadRequestError) {
     return res.status(400).json({ message: err.message || "Request failed" });
   } else {
+    logger.error(err.message, err); // Log the error message to the file system
     return res.status(500).json({ message: "Internal Server Error" });
   }
 
