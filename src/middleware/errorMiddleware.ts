@@ -7,7 +7,7 @@ const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  console.error(err.stack);
+  console.error(err.stack); // log to console
 
   if (err instanceof AuthenticationError) {
     return res

@@ -4,8 +4,9 @@ import db from "../database/database";
 const users = [{ id: 1, name: "John Doe" }];
 
 export const getUsers = async (req: Request, res: Response) => {
-  const { rows } = await db.raw("SELECT * from users");
-  console.log("xxx", rows);
+  const rows = await db.select("*").from("users");
+  // const rows2 = await db("users").select("*");
+  // const { rows } = await db.raw("SELECT * from users");
 
   res.json(rows);
 };
