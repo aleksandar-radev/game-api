@@ -1,11 +1,20 @@
-import { Request, Response } from "express";
+import pagination from "./../helpers/pagination";
+import { Response } from "express";
 import db from "../database/database";
 import { AuthRequest } from "../helpers/request";
 
 export const getUsers = async (req: AuthRequest, res: Response) => {
-  const rows = await db.select("*").from("users");
-  // const rows2 = await db("users").select("*");
-  // const { rows } = await db.raw("SELECT * from users");
+  try {
+    const pg = pagination.getPaginationOptions(req);
 
-  res.json(rows);
+    const rows = await db
+      .select("*")
+      .from("users")
+      .limit(pg.pageSize)
+      .offset(pg.offset);
+
+    res.json(rows);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
 };

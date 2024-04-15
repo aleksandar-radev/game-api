@@ -43,7 +43,15 @@ const infoTransport = new winston.transports.File({
   format: winston.format.combine(
     filterOnly("info"), // Apply the filter for only 'info' level logs
     winston.format.timestamp(),
-    winston.format.json()
+    winston.format.json(),
+    winston.format.printf((info) => {
+      return JSON.stringify({
+        timestamp: info.timestamp,
+        level: info.level,
+        message: info.message,
+        stack: info.stack,
+      });
+    })
   ),
   maxsize: 5242880, // 5MB
   maxFiles: 5,
@@ -64,7 +72,15 @@ const infoTransport = new winston.transports.File({
 const logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp(),
-    winston.format.json()
+    winston.format.json(),
+    winston.format.printf((info) => {
+      return JSON.stringify({
+        timestamp: info.timestamp,
+        level: info.level,
+        message: info.message,
+        stack: info.stack,
+      });
+    })
   ),
   transports: [errorTransport, infoTransport],
 });

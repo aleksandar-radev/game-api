@@ -37,7 +37,7 @@ function init(app: express.Express, process: NodeJS.Process) {
 
   process.on("unhandledRejection", (reason, promise) => {
     console.error("Unhandled Rejection at:", promise, "reason:", reason);
-    logger.error("Unhandled Rejection at:", promise, "reason:", reason);
+    logger.error("Unhandled Rejection at:", reason);
   });
 }
 
