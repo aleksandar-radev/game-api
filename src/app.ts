@@ -1,41 +1,42 @@
-import express, { Express, Request, Response } from "express";
-import userRoutes from "./routes/userRoutes";
-import authRoutes from "./routes/authRoutes";
+import express, { Express } from "express";
 import logger from "./config/logger";
-import { errorHandler } from "./middleware/errorMiddleware";
+import { errorMiddleware } from "./middleware/errorMiddleware";
 import multer from "multer";
+import addRoutes from "./routes/routes";
 
 const app: Express = express();
-const PORT = process.env.PORT || 3000;
+init(app, process);
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(multer().any());
+function init(app: express.Express, process: NodeJS.Process) {
+  const PORT = process.env.PORT;
 
-app.get("/", (req: Request, res: Response) => {
-  logger.info("API is running...");
-  res.send("API is running...");
-});
+  if (!PORT) {
+    throw new Error("PORT is not defined");
+  }
 
-app.use("/", authRoutes);
-app.use("/api/users", userRoutes);
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+  app.use(multer().any());
 
-// Has to be after all routes!
-app.use(errorHandler);
+  addRoutes(app); // adds all routes from ./routes
+  app.use(errorMiddleware); // Has to be after all routes!
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+  // start server
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
 
-process.on("uncaughtException", (error) => {
-  console.error("Uncaught Exception:", error);
-  logger.error("Uncaught Exception:", error);
-  process.exit(1);
-});
+  // ERROR HANDLING (logging)
+  process.on("uncaughtException", (error) => {
+    console.error("Uncaught Exception:", error);
+    logger.error("Uncaught Exception:", error);
+    process.exit(1);
+  });
 
-process.on("unhandledRejection", (reason, promise) => {
-  console.error("Unhandled Rejection at:", promise, "reason:", reason);
-  logger.error("Unhandled Rejection at:", promise, "reason:", reason);
-});
+  process.on("unhandledRejection", (reason, promise) => {
+    console.error("Unhandled Rejection at:", promise, "reason:", reason);
+    logger.error("Unhandled Rejection at:", promise, "reason:", reason);
+  });
+}
 
 export default app;

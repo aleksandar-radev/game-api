@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import User from "../models/User";
 import asyncHandler from "express-async-handler";
-import { AuthenticationError } from "./errorMiddleware";
+import { AuthenticationError } from "../helpers/error";
+import { userRepository } from "../repositories/userRepository";
 
-const authenticate = asyncHandler(
+const authMiddleware = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       let token = req.cookies.jwt;
@@ -20,13 +20,13 @@ const authenticate = asyncHandler(
         throw new AuthenticationError("UserId not found");
       }
 
-      const user = await User.findById(decoded.userId, "_id name email");
+      const user = await userRepository.findUserById(decoded.userId);
 
       if (!user) {
         throw new AuthenticationError("User not found");
       }
 
-      req.user = user;
+      // req.user = user;
       next();
     } catch (e) {
       throw new AuthenticationError("Invalid token");
@@ -34,4 +34,4 @@ const authenticate = asyncHandler(
   }
 );
 
-export { authenticate };
+export { authMiddleware };

@@ -3,11 +3,8 @@ export interface IUser {
   email: string;
   password: string;
   username: string;
-  // Add other user properties here
 }
 
-// Optionally, if you have methods that operate directly on a user instance,
-// you can define a class that implements this interface:
 export class User implements IUser {
   id?: number;
   email: string;

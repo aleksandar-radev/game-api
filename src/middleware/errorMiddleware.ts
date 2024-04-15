@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import logger from "../config/logger";
+import { AuthenticationError, BadRequestError } from "../helpers/error";
 
-const errorHandler = (
+const errorMiddleware = (
   err: Error,
   req: Request,
   res: Response,
@@ -23,18 +24,4 @@ const errorHandler = (
   // next();
 };
 
-class AuthenticationError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "AuthenticationError";
-  }
-}
-
-class BadRequestError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "BadRequestError";
-  }
-}
-
-export { errorHandler, AuthenticationError, BadRequestError };
+export { errorMiddleware };
