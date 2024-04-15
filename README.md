@@ -11,3 +11,6 @@ DATABASE:
 run a docker container :)
 
 copy .env.dev to .env locally
+
+MANUALLY CREATE DB SCHEMA:
+create schema %name%;

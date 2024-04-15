@@ -1,5 +1,5 @@
 import knex from "knex";
-import knexConfig from "../knexfile"; // Adjust the import path to where your knexfile is located
+import knexConfig from "../../knexfile"; // Adjust the import path to where your knexfile is located
 import logger from "../config/logger";
 
 // Initialize Knex with the environment-specific configuration

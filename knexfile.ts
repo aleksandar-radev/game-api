@@ -4,6 +4,7 @@ dotenv.config();
 interface KnexConfig {
   [key: string]: {
     client: string;
+    searchPath: Array<string>;
     connection: {
       filename?: string;
       host?: string;
@@ -32,6 +33,7 @@ const environment: string = process.env.ENV || "development";
 const config: KnexConfig = {
   local: {
     client: "postgresql",
+    searchPath: [process.env.DB_SCHEMA!],
     connection: {
       host: process.env.DB_HOST!,
       database: process.env.DB_NAME!,
@@ -53,6 +55,7 @@ const config: KnexConfig = {
   },
   development: {
     client: "postgresql",
+    searchPath: [process.env.DB_SCHEMA!],
     connection: {
       host: process.env.DB_HOST!,
       database: process.env.DB_NAME!,
@@ -75,6 +78,7 @@ const config: KnexConfig = {
 
   production: {
     client: "postgresql",
+    searchPath: [process.env.DB_SCHEMA!],
     connection: {
       host: process.env.DB_HOST!,
       database: process.env.DB_NAME!,
