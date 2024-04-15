@@ -1,11 +1,12 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
 import { AuthenticationError } from "../helpers/error";
 import { userRepository } from "../repositories/userRepository";
+import { AuthRequest } from "../helpers/request";
 
 const authMiddleware = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       let token = req.cookies.jwt;
 
@@ -26,7 +27,7 @@ const authMiddleware = asyncHandler(
         throw new AuthenticationError("User not found");
       }
 
-      // req.user = user;
+      req.user = user;
       next();
     } catch (e) {
       throw new AuthenticationError("Invalid token");

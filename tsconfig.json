@@ -5,10 +5,11 @@
     "rootDir": "./",
     "outDir": "./dist",
     "esModuleInterop": true,
+    "moduleResolution": "node",
     "strict": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
   },
   "include": ["src/**/*", "knexfile.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 }

@@ -1,6 +1,11 @@
 import { Request } from "express";
 import * as pagination from "./pagination";
 import * as sorting from "./sorting";
+import { IUser } from "../models/User";
+
+export interface AuthRequest extends Request {
+  user?: IUser;
+}
 
 // Assuming `getPaginationOptions` and `getSortingOptions` return objects of a known structure,
 // you might want to define those structures. If they're dynamic, you could use `Record<string, unknown>`.

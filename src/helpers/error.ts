@@ -12,4 +12,11 @@ class BadRequestError extends Error {
   }
 }
 
-export { AuthenticationError, BadRequestError };
+class DbNotFoundException extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "DbNotFoundException";
+  }
+}
+
+export { AuthenticationError, BadRequestError, DbNotFoundException };

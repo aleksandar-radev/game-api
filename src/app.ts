@@ -2,6 +2,7 @@ import express, { Express } from "express";
 import logger from "./config/logger";
 import { errorMiddleware } from "./middleware/errorMiddleware";
 import multer from "multer";
+import cookieParser from "cookie-parser";
 import addRoutes from "./routes/routes";
 
 const app: Express = express();
@@ -17,6 +18,7 @@ function init(app: express.Express, process: NodeJS.Process) {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(multer().any());
+  app.use(cookieParser());
 
   addRoutes(app); // adds all routes from ./routes
   app.use(errorMiddleware); // Has to be after all routes!
