@@ -16,9 +16,4 @@ export class User implements IUser {
     this.password = password;
     this.username = username;
   }
-
-  // Example method
-  greet() {
-    return `Hello, my username is ${this.username}`;
-  }
 }

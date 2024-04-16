@@ -1,16 +1,22 @@
-import { userRepository } from "./../repositories/userRepository";
+import { UserRepository } from "./../repositories/UserRepository";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Response } from "express";
 import { IUser, User } from "../models/User";
 import { BadRequestError } from "../helpers/error";
+import BaseService from "./BaseService";
+import { Inject, Service } from "typedi";
 
-export const authService = {
-  generateToken: (res: Response, userId: number | undefined) => {
-    if (!userId) {
+@Service()
+export class AuthService extends BaseService {
+  constructor(@Inject() private userRepository: UserRepository) {
+    super();
+  }
+  generateToken = (res: Response, user: IUser | undefined) => {
+    if (!user) {
       throw new Error("Fatal error. id not found !? #generateToken");
     }
-
+    const userId = user.id;
     const jwtSecret = process.env.JWT_SECRET || "";
     const token = jwt.sign({ userId }, jwtSecret, {
       expiresIn: "30 days",
@@ -22,17 +28,20 @@ export const authService = {
       sameSite: "strict",
       maxAge: 30 * 60 * 60 * 24 * 1000,
     });
-  },
-  clearToken: (res: Response) => {
+  };
+
+  clearToken = (res: Response) => {
     res.cookie("jwt", "", {
       httpOnly: true,
       expires: new Date(0),
     });
-  },
-  comparePassword: (password: string, user: IUser) => {
+  };
+
+  comparePassword = (password: string, user: IUser) => {
     return bcrypt.compare(password, user.password);
-  },
-  validateRegistration: async (
+  };
+
+  validateRegistration = async (
     username: string,
     email: string,
     password: string,
@@ -50,22 +59,23 @@ export const authService = {
       throw new BadRequestError("Password must be at least 6 characters");
     }
 
-    const userExists = await userRepository.findUserByEmail(email);
+    const userExists = await this.userRepository.findUserByEmail(email);
 
     if (userExists) {
       throw new BadRequestError("User already exists");
     }
-  },
-  createUser: async (username: string, email: string, password: string) => {
+  };
+
+  createUser = async (username: string, email: string, password: string) => {
     const salt = await bcrypt.genSalt(10);
-    const pwd = await bcrypt.hash(password, salt);
-    const userId = await userRepository.createUser(
-      new User({ username, email, password: pwd })
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const userId = await this.userRepository.createUser(
+      new User({ username, email, password: hashedPassword })
     );
-    const user = await userRepository.getUserById(userId);
+    const user = await this.userRepository.findUserById(userId);
 
     return user;
-  },
-};
+  };
+}
 
-export default authService;
+export default AuthService;

@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import logger from "../config/logger";
 import { AuthenticationError, BadRequestError } from "../helpers/error";
 
-const errorMiddleware = (
+export const errorMiddleware = (
   err: Error,
   req: Request,
   res: Response,
@@ -24,4 +24,4 @@ const errorMiddleware = (
   // next();
 };
 
-export { errorMiddleware };
+export default errorMiddleware;

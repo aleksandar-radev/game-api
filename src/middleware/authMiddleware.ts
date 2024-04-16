@@ -2,12 +2,14 @@ import { Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
 import { AuthenticationError } from "../helpers/error";
-import { userRepository } from "../repositories/userRepository";
 import { AuthRequest } from "../helpers/request";
+import UserRepository from "../repositories/UserRepository";
+import Container from "typedi";
 
-const authMiddleware = asyncHandler(
+export const authMiddleware = asyncHandler(
   async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
+      const userRepository = Container.get(UserRepository);
       let token = req.cookies.jwt;
 
       if (!token) {
@@ -30,9 +32,9 @@ const authMiddleware = asyncHandler(
       req.user = user;
       next();
     } catch (e) {
-      throw new AuthenticationError("Invalid token");
+      throw new AuthenticationError("Invalid token or not logged in");
     }
   }
 );
 
-export { authMiddleware };
+export default authMiddleware;

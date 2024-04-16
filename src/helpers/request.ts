@@ -1,5 +1,5 @@
 import { Request } from "express";
-import * as pagination from "./pagination";
+import pagination from "./pagination";
 import * as sorting from "./sorting";
 import { IUser } from "../models/User";
 

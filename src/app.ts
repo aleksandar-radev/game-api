@@ -1,4 +1,5 @@
 import express, { Express } from "express";
+import "reflect-metadata";
 import logger from "./config/logger";
 import { errorMiddleware } from "./middleware/errorMiddleware";
 import multer from "multer";
@@ -36,7 +37,7 @@ function init(app: express.Express, process: NodeJS.Process) {
   });
 
   process.on("unhandledRejection", (reason, promise) => {
-    console.error("Unhandled Rejection at:", promise, "reason:", reason);
+    console.error("Unhandled Rejection at:", promise);
     logger.error("Unhandled Rejection at:", reason);
   });
 }
