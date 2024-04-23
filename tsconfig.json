@@ -11,6 +11,10 @@
     "forceConsistentCasingInFileNames": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["src/*"]
+    }
   },
   "include": ["src/**/*", "knexfile.ts"],
   "exclude": ["node_modules", "dist"]

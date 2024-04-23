@@ -1,47 +1,29 @@
-import {
-  JsonController,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from "routing-controllers";
+import { Controller, Get, Post, Body, Patch, Param } from "routing-controllers";
 import { Service } from "typedi";
-import { UserDataService } from "../services/user-data.service";
-import { CreateUserDataDto } from "../dto/create-user-data.dto";
-import { UpdateUserDataDto } from "../dto/update-user-data.dto";
+import { UserDataService } from "../services/UserDataService";
+import { CreateUserDataDto } from "../dto/CreateUserDataDto";
+import { UpdateUserDataDto } from "../dto/UpdateUserDataDto";
 
 @Service()
-@JsonController("/user-data")
+@Controller("/user-data")
 export class UserDataController {
   constructor(private readonly userDataService: UserDataService) {}
 
-  @Post()
+  @Post("/")
   create(@Body() createUserDataDto: CreateUserDataDto) {
-    return this.userDataService.create(createUserDataDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.userDataService.findAll();
+    return this.userDataService.createUserData(createUserDataDto);
   }
 
   @Get("/:id")
-  findOne(@Param("id") id: string) {
-    return this.userDataService.findOne(+id);
+  findOne(@Param("id") id: number) {
+    return this.userDataService.getUserDataById(id);
   }
 
   @Patch("/:id")
   update(
-    @Param("id") id: string,
+    @Param("id") id: number,
     @Body() updateUserDataDto: UpdateUserDataDto
   ) {
-    return this.userDataService.update(+id, updateUserDataDto);
-  }
-
-  @Delete("/:id")
-  remove(@Param("id") id: string) {
-    return this.userDataService.remove(+id);
+    return this.userDataService.updateUserData(id, updateUserDataDto);
   }
 }

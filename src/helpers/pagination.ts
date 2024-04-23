@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { BadRequestError } from "./error";
 
 interface PaginationResult {
   total: number;
@@ -23,7 +24,7 @@ export const pagination = {
         : defaultPageSize;
 
     if (page < 1 || pageSize < 1) {
-      throw new Error("Invalid pagination options");
+      throw new BadRequestError("Invalid pagination options");
     }
 
     return { page, pageSize, offset: (page - 1) * pageSize };

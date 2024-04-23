@@ -11,7 +11,7 @@ import { Service } from "typedi";
 @Service()
 export class ErrorMiddleware implements ExpressErrorMiddlewareInterface {
   error(err: Error, req: Request, res: Response, next: NextFunction) {
-    console.error("Error Middleware", err.stack);
+    console.error("Error Middleware", err.message, err.stack);
 
     if (err instanceof AuthenticationError) {
       return res

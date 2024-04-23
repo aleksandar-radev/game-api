@@ -1,9 +1,9 @@
 import express, { Request, Response } from "express";
 import { useContainer, useExpressServer } from "routing-controllers";
-import AuthController from "../controllers/AuthController";
 import UserController from "../controllers/UserController";
 import Container from "typedi";
 import { ErrorMiddleware } from "../middleware/ErrorMiddleware";
+import { UserDataController } from "../controllers/UserDataController";
 
 const addRoutes = (app: express.Express) => {
   app.get("/", (req: Request, res: Response) => {
@@ -13,7 +13,7 @@ const addRoutes = (app: express.Express) => {
   useContainer(Container);
 
   useExpressServer(app, {
-    controllers: [AuthController, UserController],
+    controllers: [UserController, UserDataController],
     middlewares: [ErrorMiddleware],
     defaultErrorHandler: false, // Disable default error handling
   });
