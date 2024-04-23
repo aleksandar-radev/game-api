@@ -1,7 +1,6 @@
 import express, { Express } from "express";
 import "reflect-metadata";
 import logger from "./config/logger";
-import { errorMiddleware } from "./middleware/errorMiddleware";
 import multer from "multer";
 import cookieParser from "cookie-parser";
 import addRoutes from "./routes/routes";
@@ -22,7 +21,6 @@ function init(app: express.Express, process: NodeJS.Process) {
   app.use(cookieParser());
 
   addRoutes(app); // adds all routes from ./routes
-  app.use(errorMiddleware); // Has to be after all routes!
 
   // start server
   app.listen(PORT, () => {

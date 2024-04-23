@@ -10,18 +10,18 @@ export class UserRepository extends BaseRepository {
   constructor() {
     super();
   }
-  findUserByEmail = async (email: string): Promise<IUser | undefined> => {
+  async findUserByEmail(email: string): Promise<IUser | undefined> {
     const user = await db(this.tableName).where({ email }).first();
     return user;
-  };
-  createUser = async (user: IUser): Promise<number> => {
+  }
+  async createUser(user: IUser): Promise<number> {
     const [userId] = await db(this.tableName).insert(user).returning("id");
     return userId.id;
-  };
-  findUserById = async (id: number): Promise<IUser | undefined> => {
+  }
+  async findUserById(id: number): Promise<IUser | undefined> {
     const user = await db(this.tableName).where({ id }).first();
     return user;
-  };
+  }
 }
 
 export default UserRepository;

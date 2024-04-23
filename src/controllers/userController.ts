@@ -1,16 +1,21 @@
-import pagination from "./../helpers/pagination";
+import pagination from "../helpers/pagination";
 import { Response } from "express";
 import db from "../database/database";
 import { AuthRequest } from "../helpers/request";
 import BaseController from "./BaseController";
 import { Service } from "typedi";
+import { Controller, Get, Req, Res, UseBefore } from "routing-controllers";
+import { AuthMiddleware } from "../middleware/AuthMiddleware";
 
+@Controller("/api/users")
+@UseBefore(AuthMiddleware)
 @Service()
 class UserController extends BaseController {
   constructor() {
     super();
   }
-  getUsers = async (req: AuthRequest, res: Response) => {
+  @Get("/")
+  async getUsers(@Req() req: AuthRequest, @Res() res: Response) {
     try {
       const pg = pagination.getPaginationOptions(req);
 
@@ -24,7 +29,7 @@ class UserController extends BaseController {
     } catch (error: any) {
       res.status(400).json({ error: error.message });
     }
-  };
+  }
 }
 
 export default UserController;

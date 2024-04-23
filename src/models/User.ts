@@ -6,14 +6,10 @@ export interface IUser {
 }
 
 export class User implements IUser {
-  id?: number;
-  email: string;
-  password: string;
-  username: string;
-
-  constructor({ email, password, username }: IUser) {
-    this.email = email;
-    this.password = password;
-    this.username = username;
-  }
+  constructor(
+    public email: string,
+    public password: string,
+    public username: string,
+    public id: number | undefined = undefined
+  ) {}
 }

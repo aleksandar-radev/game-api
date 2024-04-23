@@ -12,7 +12,7 @@ export class AuthService extends BaseService {
   constructor(@Inject() private userRepository: UserRepository) {
     super();
   }
-  generateToken = (res: Response, user: IUser | undefined) => {
+  generateToken(res: Response, user: IUser | undefined) {
     if (!user) {
       throw new Error("Fatal error. id not found !? #generateToken");
     }
@@ -28,25 +28,25 @@ export class AuthService extends BaseService {
       sameSite: "strict",
       maxAge: 30 * 60 * 60 * 24 * 1000,
     });
-  };
+  }
 
-  clearToken = (res: Response) => {
+  clearToken(res: Response) {
     res.cookie("jwt", "", {
       httpOnly: true,
       expires: new Date(0),
     });
-  };
+  }
 
   comparePassword = (password: string, user: IUser) => {
     return bcrypt.compare(password, user.password);
   };
 
-  validateRegistration = async (
+  async validateRegistration(
     username: string,
     email: string,
     password: string,
     confirmPassword: string
-  ) => {
+  ) {
     if (!username || !email || !password || !confirmPassword) {
       throw new BadRequestError("Please provide all required fields");
     }
@@ -64,18 +64,18 @@ export class AuthService extends BaseService {
     if (userExists) {
       throw new BadRequestError("User already exists");
     }
-  };
+  }
 
-  createUser = async (username: string, email: string, password: string) => {
+  async createUser(username: string, email: string, password: string) {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     const userId = await this.userRepository.createUser(
-      new User({ username, email, password: hashedPassword })
+      new User(username, email, hashedPassword)
     );
     const user = await this.userRepository.findUserById(userId);
 
     return user;
-  };
+  }
 }
 
 export default AuthService;

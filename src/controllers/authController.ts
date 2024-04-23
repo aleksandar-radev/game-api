@@ -1,11 +1,22 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import AuthService from "../services/AuthService";
-import asyncHandler from "express-async-handler";
 import { AuthenticationError } from "../helpers/error";
 import BaseController from "./BaseController";
 import { Inject, Service } from "typedi";
 import UserRepository from "../repositories/UserRepository";
+import {
+  Controller,
+  Post,
+  UseBefore,
+  Body,
+  Req,
+  Res,
+  OnUndefined,
+} from "routing-controllers";
+import { AuthMiddleware } from "../middleware/AuthMiddleware";
+import { AuthRequest } from "../helpers/request";
 
+@Controller("/api/auth")
 @Service()
 export class AuthController extends BaseController {
   constructor(
@@ -15,25 +26,29 @@ export class AuthController extends BaseController {
     super();
   }
 
-  registerUser = asyncHandler(async (req: Request, res: Response) => {
-    const { username, email, password, confirmPassword } = req.body;
+  @Post("/register")
+  async register(@Body() body: any, @Res() res: Response) {
+    try {
+      const { username, email, password, confirmPassword } = body;
 
-    await this.authService.validateRegistration(
-      username,
-      email,
-      password,
-      confirmPassword
-    );
+      await this.authService.validateRegistration(
+        username,
+        email,
+        password,
+        confirmPassword
+      );
 
-    const user = await this.authService.createUser(username, email, password);
+      const user = await this.authService.createUser(username, email, password);
+      this.authService.generateToken(res, user);
+      res.status(201).json(user);
+    } catch (error) {
+      throw error;
+    }
+  }
 
-    this.authService.generateToken(res, user);
-
-    res.status(201).json(user);
-  });
-
-  loginUser = async (req: Request, res: Response) => {
-    const { email, password } = req.body;
+  @Post("/login")
+  async login(@Body() body: any, @Res() res: Response) {
+    const { email, password } = body;
 
     const user = await this.userRepository.findUserByEmail(email);
     if (!user) {
@@ -51,12 +66,14 @@ export class AuthController extends BaseController {
 
     this.authService.generateToken(res, user);
     res.status(200).json(user);
-  };
+  }
 
-  logoutUser = async (req: Request, res: Response) => {
+  @Post("/logout")
+  @UseBefore(AuthMiddleware)
+  async logout(@Req() req: AuthRequest, @Res() res: Response) {
     this.authService.clearToken(res);
     res.status(200).json({ message: "Successfully logged out" });
-  };
+  }
 }
 
 export default AuthController;

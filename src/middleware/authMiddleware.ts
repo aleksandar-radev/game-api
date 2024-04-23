@@ -1,15 +1,18 @@
-import { Response, NextFunction } from "express";
+import { Middleware, ExpressMiddlewareInterface } from "routing-controllers";
+import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import asyncHandler from "express-async-handler";
 import { AuthenticationError } from "../helpers/error";
 import { AuthRequest } from "../helpers/request";
 import UserRepository from "../repositories/UserRepository";
-import Container from "typedi";
+import { Service } from "typedi";
 
-export const authMiddleware = asyncHandler(
-  async (req: AuthRequest, res: Response, next: NextFunction) => {
+@Middleware({ type: "before" })
+@Service()
+export class AuthMiddleware implements ExpressMiddlewareInterface {
+  constructor(private userRepository: UserRepository) {}
+
+  async use(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const userRepository = Container.get(UserRepository);
       let token = req.cookies.jwt;
 
       if (!token) {
@@ -23,7 +26,7 @@ export const authMiddleware = asyncHandler(
         throw new AuthenticationError("UserId not found");
       }
 
-      const user = await userRepository.findUserById(decoded.userId);
+      const user = await this.userRepository.findUserById(decoded.userId);
 
       if (!user) {
         throw new AuthenticationError("User not found");
@@ -31,10 +34,8 @@ export const authMiddleware = asyncHandler(
 
       req.user = user;
       next();
-    } catch (e) {
-      throw new AuthenticationError("Invalid token or not logged in");
+    } catch (err) {
+      next(err);
     }
   }
-);
-
-export default authMiddleware;
+}
