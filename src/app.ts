@@ -1,22 +1,29 @@
-// src\app.ts
-import express, { Express } from "express";
+import express, { Application, Express } from "express";
 import "reflect-metadata";
 import logger from "./config/logger";
 import multer from "multer";
 import cookieParser from "cookie-parser";
-import addRoutes from "./routes/routes";
-import { AppDataSource } from "./database/connection";
+import { addRoutes } from "./routes/routes";
 import dotenv from "dotenv";
-dotenv.config();
+import { AppDataSource } from "./database/connection";
 
-const app: Express = express();
-
-async function init(app: express.Express, process: NodeJS.Process) {
-  const PORT = process.env.PORT;
+export async function createApp(): Promise<Application> {
+  dotenv.config();
+  const app: Express = express();
+  const PORT =
+    process.env.NODE_ENV === "test" ? 3001 : process.env.PORT || 3000;
 
   if (!PORT) {
     throw new Error("PORT is not defined");
   }
+
+  await AppDataSource.initialize()
+    .then(() => {
+      console.log("Data Source has been initialized!");
+    })
+    .catch((err) => {
+      console.error("Error during Data Source initialization", err);
+    });
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
@@ -41,8 +48,8 @@ async function init(app: express.Express, process: NodeJS.Process) {
     console.error("Unhandled Rejection at:", promise);
     logger.error("Unhandled Rejection at:", reason);
   });
+
+  return app;
 }
 
-init(app, process);
-
-export default app;
+export default createApp;

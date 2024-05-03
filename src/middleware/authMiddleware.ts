@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { AuthenticationError } from "../helpers/error";
 import { AuthRequest } from "../helpers/request";
-import UserRepository from "../repositories/UserRepository";
+import { UserRepository } from "../repositories/UserRepository";
 import { Service } from "typedi";
 
 @Middleware({ type: "before" })

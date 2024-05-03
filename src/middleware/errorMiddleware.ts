@@ -1,7 +1,6 @@
 import {
   Middleware,
   ExpressErrorMiddlewareInterface,
-  HttpError,
   BadRequestError as RoutingControllersBadRequestError,
 } from "routing-controllers";
 import { Request, Response, NextFunction } from "express";

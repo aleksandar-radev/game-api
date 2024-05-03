@@ -3,7 +3,6 @@ import { UpdateUserDataDto } from "../dto/UpdateUserDataDto";
 import { BaseService } from "./BaseService";
 import { Inject, Service } from "typedi";
 import { UserDataRepository } from "../repositories/UserDataRepository";
-import { UserData } from "../models/UserData";
 
 @Service()
 export class UserDataService extends BaseService {
@@ -17,7 +16,7 @@ export class UserDataService extends BaseService {
   }
 
   async updateUserData(id: number, userData: UpdateUserDataDto) {
-    const updatedUserData = await this.userDataRepository.updateUserData(
+    const updatedUserData = await this.userDataRepository.updateAndGet(
       id,
       userData
     );
@@ -25,9 +24,7 @@ export class UserDataService extends BaseService {
   }
 
   async createUserData(userData: CreateUserDataDto) {
-    const createdUserData = await this.userDataRepository.createUserData(
-      userData
-    );
+    const createdUserData = await this.userDataRepository.save(userData);
     return createdUserData;
   }
 }

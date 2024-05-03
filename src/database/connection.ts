@@ -1,12 +1,14 @@
 import { DataSource } from "typeorm";
-import config from "../../ormconfig";
+import { config, testConfig } from "../../ormconfig";
 
-export const AppDataSource = new DataSource(config);
+let AppDataSource: DataSource;
 
-AppDataSource.initialize()
-  .then(() => {
-    console.log("Data Source has been initialized!");
-  })
-  .catch((err) => {
-    console.error("Error during Data Source initialization", err);
-  });
+if (process.env.NODE_ENV === "test") {
+  AppDataSource = new DataSource(testConfig);
+  console.log("Test Data Source config:", testConfig);
+} else {
+  AppDataSource = new DataSource(config);
+  console.log("Data Source config:", config);
+}
+
+export { AppDataSource };

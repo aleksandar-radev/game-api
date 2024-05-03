@@ -12,14 +12,14 @@ import {
   HttpCode,
 } from "routing-controllers";
 import { AuthMiddleware } from "../middleware/AuthMiddleware";
-import AuthService from "../services/AuthService";
+import { AuthService } from "../services/AuthService";
 import { AuthenticationError } from "../helpers/error";
-import UserRepository from "../repositories/UserRepository";
+import { UserRepository } from "../repositories/UserRepository";
 import { RegisterUserDto } from "../dto/RegisterUserDto";
 
 @Controller("/api/user")
 @Service()
-class UserController {
+export class UserController {
   constructor(
     @Inject() private authService: AuthService,
     @Inject() private userRepository: UserRepository
@@ -69,15 +69,13 @@ class UserController {
   @HttpCode(200)
   async logout(@Req() req: AuthRequest, @Res() res: Response) {
     this.authService.clearToken(res);
-    return "Successfully logged out";
+    return { message: "Successfully logged out" };
   }
 
   @Get("/")
   @HttpCode(200)
   @UseBefore(AuthMiddleware)
   async getUsers(@Req() req: AuthRequest) {
-    console.log("getUsers");
-
     return this.userRepository.find();
   }
 
@@ -85,9 +83,7 @@ class UserController {
   @HttpCode(200)
   @UseBefore(AuthMiddleware)
   async getUser(@Req() req: AuthRequest) {
-    const userId = req.params.id;
+    const userId = parseInt(req.params.id, 10);
     return this.userRepository.findOne({ where: { id: userId } });
   }
 }
-
-export default UserController;

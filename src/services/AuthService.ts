@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { Response } from "express";
 import { User } from "../models/User";
 import { BadRequestError } from "../helpers/error";
-import BaseService from "./BaseService";
+import { BaseService } from "./BaseService";
 import { Inject, Service } from "typedi";
 
 @Service()
@@ -60,7 +60,9 @@ export class AuthService extends BaseService {
       throw new BadRequestError("Password must be at least 6 characters");
     }
 
-    const userExists = await this.userRepository.findOne({ where: { email } });
+    const userExists = await this.userRepository.findOne({
+      where: [{ email }, { username }],
+    });
 
     if (userExists) {
       throw new BadRequestError("User already exists");
@@ -68,16 +70,18 @@ export class AuthService extends BaseService {
   }
 
   async createUser(username: string, email: string, password: string) {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await this.hashPassword(password);
     const user = new User({});
     user.username = username;
     user.email = email;
     user.password = hashedPassword;
-    await this.userRepository.createUser(user);
+    await this.userRepository.save(user);
 
     return user;
   }
-}
 
-export default AuthService;
+  async hashPassword(password: string) {
+    const salt = await bcrypt.genSalt(10);
+    return bcrypt.hashSync(password, salt);
+  }
+}

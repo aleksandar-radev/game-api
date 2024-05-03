@@ -36,5 +36,3 @@ export const pagination = {
     res.set("Pagination-PageSize", result.pageSize.toString());
   },
 };
-
-export default pagination;

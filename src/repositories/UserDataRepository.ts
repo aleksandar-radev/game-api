@@ -4,36 +4,16 @@ import { Repository } from "typeorm";
 import { AppDataSource } from "../database/connection";
 
 @Service()
-export class UserDataRepository {
-  private repository: Repository<UserData>;
-
+export class UserDataRepository extends Repository<UserData> {
   constructor() {
-    this.repository = AppDataSource.getRepository(UserData);
+    super(UserData, AppDataSource.createEntityManager());
   }
 
-  async findOne(options: object): Promise<UserData | null> {
-    return this.repository.findOne(options);
-  }
-
-  async createUserData(userData: UserData): Promise<UserData> {
-    return this.repository.save(userData);
-  }
-
-  async find(): Promise<UserData[]> {
-    return this.repository.find();
-  }
-
-  async updateUserData(
+  async updateAndGet(
     id: number,
     userData: Partial<UserData>
   ): Promise<UserData | null> {
-    await this.repository.update(id, userData);
-    return this.repository.findOne({ where: { id } });
-  }
-
-  async deleteUserData(id: number): Promise<void> {
-    await this.repository.delete(id);
+    await this.update(id, userData);
+    return this.findOne({ where: { id } });
   }
 }
-
-export default UserDataRepository;
