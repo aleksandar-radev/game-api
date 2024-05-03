@@ -1,9 +1,9 @@
 import bcrypt from "bcryptjs";
-import { Knex } from "knex";
+import { DataSource } from "typeorm";
+import { User } from "../../models/User";
 import readline from "readline";
 
-export async function seed(knex: Knex): Promise<void> {
-  // Disallow seeding in production
+export async function seed(dataSource: DataSource): Promise<void> {
   if (process.env.ENV !== "local") {
     if (process.env.ENV !== "development") {
       throw new Error(
@@ -31,7 +31,8 @@ export async function seed(knex: Knex): Promise<void> {
     }
   }
 
-  await knex("users").del();
+  const userRepository = dataSource.getRepository(User);
+  await userRepository.clear();
 
   const salt = await bcrypt.genSalt(10);
   const pwd = await bcrypt.hash("Admin123!", salt);
@@ -54,6 +55,5 @@ export async function seed(knex: Knex): Promise<void> {
     },
   ];
 
-  // Inserts seed entries
-  await knex("users").insert(users);
+  await userRepository.save(users);
 }

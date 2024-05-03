@@ -1,19 +1,26 @@
-export interface IUserData {
-  id: number;
-  data_json: object;
-  highest_level: number;
-  total_experience: number;
-  total_gold: number;
-  premium: string;
-}
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-export class UserData implements IUserData {
-  constructor(
-    public id: number,
-    public data_json: object,
-    public highest_level: number,
-    public total_experience: number,
-    public total_gold: number,
-    public premium: string
-  ) {}
+@Entity("user_data")
+export class UserData {
+  @PrimaryGeneratedColumn()
+  id?: number;
+
+  @Column({ type: "jsonb" })
+  data_json?: object;
+
+  @Column()
+  highest_level?: number;
+
+  @Column()
+  total_experience?: number;
+
+  @Column()
+  total_gold?: number;
+
+  @Column({ default: "no" })
+  premium?: string;
+
+  constructor(config: Partial<UserData>) {
+    Object.assign(this, config);
+  }
 }

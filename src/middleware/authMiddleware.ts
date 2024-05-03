@@ -26,7 +26,9 @@ export class AuthMiddleware implements ExpressMiddlewareInterface {
         throw new AuthenticationError("UserId not found");
       }
 
-      const user = await this.userRepository.findUserById(decoded.userId);
+      const user = await this.userRepository.findOne({
+        where: { id: decoded.userId },
+      });
 
       if (!user) {
         throw new AuthenticationError("User not found");

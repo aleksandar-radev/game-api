@@ -11,13 +11,9 @@ export class UserDataService extends BaseService {
     super();
   }
 
-  async createUserData(userData: CreateUserDataDto) {
-    console.log(userData);
-
-    // const createdUserData = await this.userDataRepository.createUserData(
-    //   userData
-    // );
-    // return createdUserData;
+  async getUserDataById(id: number) {
+    const userData = await this.userDataRepository.findOne({ where: { id } });
+    return userData;
   }
 
   async updateUserData(id: number, userData: UpdateUserDataDto) {
@@ -28,8 +24,10 @@ export class UserDataService extends BaseService {
     return updatedUserData;
   }
 
-  async getUserDataById(id: number) {
-    const userData = await this.userDataRepository.getUserDataById(id);
-    return userData;
+  async createUserData(userData: CreateUserDataDto) {
+    const createdUserData = await this.userDataRepository.createUserData(
+      userData
+    );
+    return createdUserData;
   }
 }

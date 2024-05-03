@@ -1,36 +1,39 @@
-import { Knex } from "knex";
-import { IUserData, UserData } from "../models/UserData";
+import { Service } from "typedi";
+import { UserData } from "../models/UserData";
+import { Repository } from "typeorm";
+import { AppDataSource } from "../database/connection";
 
+@Service()
 export class UserDataRepository {
-  constructor(private knex: Knex) {}
+  private repository: Repository<UserData>;
 
-  async getUserDataById(id: number): Promise<IUserData | undefined> {
-    const result = await this.knex<UserData>("user_data")
-      .select("*")
-      .where("id", id)
-      .first();
-    return result;
+  constructor() {
+    this.repository = AppDataSource.getRepository(UserData);
   }
 
-  async createUserData(userData: Partial<UserData>): Promise<UserData> {
-    const [result] = await this.knex<UserData>("user_data")
-      .insert(userData)
-      .returning("*");
-    return result;
+  async findOne(options: object): Promise<UserData | null> {
+    return this.repository.findOne(options);
+  }
+
+  async createUserData(userData: UserData): Promise<UserData> {
+    return this.repository.save(userData);
+  }
+
+  async find(): Promise<UserData[]> {
+    return this.repository.find();
   }
 
   async updateUserData(
     id: number,
     userData: Partial<UserData>
-  ): Promise<UserData> {
-    const [result] = await this.knex<UserData>("user_data")
-      .where("id", id)
-      .update(userData)
-      .returning("*");
-    return result;
+  ): Promise<UserData | null> {
+    await this.repository.update(id, userData);
+    return this.repository.findOne({ where: { id } });
   }
 
   async deleteUserData(id: number): Promise<void> {
-    await this.knex<UserData>("user_data").where("id", id).del();
+    await this.repository.delete(id);
   }
 }
+
+export default UserDataRepository;

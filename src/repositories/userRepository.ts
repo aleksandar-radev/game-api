@@ -1,26 +1,26 @@
 import { Service } from "typedi";
-import db from "../database/database";
-import { IUser } from "../models/User";
-import BaseRepository from "./BaseRepository";
+import { User } from "../models/User";
+import { Repository } from "typeorm";
+import { AppDataSource } from "../database/connection";
 
 @Service()
-export class UserRepository extends BaseRepository {
-  private tableName = "users";
+export class UserRepository {
+  private repository: Repository<User>;
 
   constructor() {
-    super();
+    this.repository = AppDataSource.getRepository(User);
   }
-  async findUserByEmail(email: string): Promise<IUser | undefined> {
-    const user = await db(this.tableName).where({ email }).first();
-    return user;
+
+  async findOne(options: object): Promise<User | null> {
+    return this.repository.findOne(options);
   }
-  async createUser(user: IUser): Promise<number> {
-    const [userId] = await db(this.tableName).insert(user).returning("id");
-    return userId.id;
+
+  async createUser(user: User): Promise<User> {
+    return this.repository.save(user);
   }
-  async findUserById(id: number): Promise<IUser | undefined> {
-    const user = await db(this.tableName).where({ id }).first();
-    return user;
+
+  async find(): Promise<User[]> {
+    return this.repository.find();
   }
 }
 

@@ -1,14 +1,17 @@
+// src\app.ts
 import express, { Express } from "express";
 import "reflect-metadata";
 import logger from "./config/logger";
 import multer from "multer";
 import cookieParser from "cookie-parser";
 import addRoutes from "./routes/routes";
+import { AppDataSource } from "./database/connection";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app: Express = express();
-init(app, process);
 
-function init(app: express.Express, process: NodeJS.Process) {
+async function init(app: express.Express, process: NodeJS.Process) {
   const PORT = process.env.PORT;
 
   if (!PORT) {
@@ -39,5 +42,7 @@ function init(app: express.Express, process: NodeJS.Process) {
     logger.error("Unhandled Rejection at:", reason);
   });
 }
+
+init(app, process);
 
 export default app;

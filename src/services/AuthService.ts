@@ -2,7 +2,7 @@ import { UserRepository } from "./../repositories/UserRepository";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Response } from "express";
-import { IUser, User } from "../models/User";
+import { User } from "../models/User";
 import { BadRequestError } from "../helpers/error";
 import BaseService from "./BaseService";
 import { Inject, Service } from "typedi";
@@ -12,7 +12,8 @@ export class AuthService extends BaseService {
   constructor(@Inject() private userRepository: UserRepository) {
     super();
   }
-  generateToken(res: Response, user: IUser | undefined) {
+
+  generateToken(res: Response, user: User | undefined) {
     if (!user) {
       throw new Error("Fatal error. id not found !? #generateToken");
     }
@@ -37,9 +38,9 @@ export class AuthService extends BaseService {
     });
   }
 
-  comparePassword = (password: string, user: IUser) => {
+  comparePassword(password: string, user: User) {
     return bcrypt.compare(password, user.password);
-  };
+  }
 
   async validateRegistration(
     username: string,
@@ -59,7 +60,7 @@ export class AuthService extends BaseService {
       throw new BadRequestError("Password must be at least 6 characters");
     }
 
-    const userExists = await this.userRepository.findUserByEmail(email);
+    const userExists = await this.userRepository.findOne({ where: { email } });
 
     if (userExists) {
       throw new BadRequestError("User already exists");
@@ -69,10 +70,11 @@ export class AuthService extends BaseService {
   async createUser(username: string, email: string, password: string) {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    const userId = await this.userRepository.createUser(
-      new User(username, email, hashedPassword)
-    );
-    const user = await this.userRepository.findUserById(userId);
+    const user = new User({});
+    user.username = username;
+    user.email = email;
+    user.password = hashedPassword;
+    await this.userRepository.createUser(user);
 
     return user;
   }
