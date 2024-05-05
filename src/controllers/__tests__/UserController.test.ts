@@ -1,30 +1,57 @@
 import request from "supertest";
-import { Application } from "express";
 import { AppDataSource } from "../../database/connection";
 import { UserRepository } from "../../repositories/UserRepository";
 import { AuthService } from "../../services/AuthService";
 import { User } from "../../models/User";
 import { Container } from "typedi";
-import { createApp } from "../../app";
+import { createServer } from "../../app";
+import { Server } from "http";
+import { createConnection } from "typeorm-seeding";
+import { testConfig } from "../../../ormconfig";
+import { DataSource } from "typeorm";
 
 describe("UserController", () => {
-  let app: Application;
+  let server: Server;
+  let dataSource: DataSource;
   let userRepository: UserRepository;
   let authService: AuthService;
 
   beforeAll(async () => {
-    app = await createApp();
+    server = await createServer();
+    dataSource = await createConnection(testConfig);
+    await AppDataSource.initialize();
+  });
+
+  beforeEach(async () => {
     userRepository = Container.get(UserRepository);
     authService = Container.get(AuthService);
   });
 
   afterEach(async () => {
-    await userRepository.delete({});
+    await dataSource.synchronize(true);
   });
 
   afterAll(async () => {
-    await AppDataSource.destroy();
+    await dataSource.destroy();
+    server.close();
   });
+
+  // Helper function to create and login a user and return the JWT token
+  async function createAndLoginUserAndReturnUserAndToken() {
+    const user = new User({
+      username: "testuser",
+      email: "test@example.com",
+      password: await authService.hashPassword("password"),
+    });
+    await userRepository.save(user);
+    const loginData = { email: user.email, password: "password" };
+    const loginResponse = await request(server)
+      .post("/api/user/login")
+      .send(loginData)
+      .expect(200);
+    const jwtToken = loginResponse.headers["set-cookie"][0].split(";")[0];
+    return { user, jwtToken };
+  }
 
   describe("POST /api/user/register", () => {
     it("should register a new user", async () => {
@@ -35,7 +62,7 @@ describe("UserController", () => {
         confirmPassword: "password",
       };
 
-      const response = await request(app)
+      const response = await request(server)
         .post("/api/user/register")
         .send(userData)
         .expect(201);
@@ -59,7 +86,7 @@ describe("UserController", () => {
         password: "password",
       };
 
-      const response = await request(app)
+      const response = await request(server)
         .post("/api/user/login")
         .send(loginData)
         .expect(200);
@@ -70,26 +97,10 @@ describe("UserController", () => {
 
   describe("POST /api/user/logout", () => {
     it("should logout a user", async () => {
-      const user = new User({
-        username: "testuser",
-        email: "test@example.com",
-        password: await authService.hashPassword("password"),
-      });
-      await userRepository.save(user);
+      const { user, jwtToken } =
+        await createAndLoginUserAndReturnUserAndToken();
 
-      const loginData = {
-        email: "test@example.com",
-        password: "password",
-      };
-
-      const loginResponse = await request(app)
-        .post("/api/user/login")
-        .send(loginData)
-        .expect(200);
-
-      const jwtToken = loginResponse.headers["set-cookie"][0].split(";")[0];
-
-      const logoutResponse = await request(app)
+      const logoutResponse = await request(server)
         .post("/api/user/logout")
         .set("Cookie", jwtToken)
         .expect(200);
@@ -113,49 +124,24 @@ describe("UserController", () => {
       await userRepository.save(user1);
       await userRepository.save(user2);
 
-      const loginData = {
-        email: "test1@example.com",
-        password: "password",
-      };
+      const { user, jwtToken } =
+        await createAndLoginUserAndReturnUserAndToken();
 
-      const loginResponse = await request(app)
-        .post("/api/user/login")
-        .send(loginData)
-        .expect(200);
-
-      const jwtToken = loginResponse.headers["set-cookie"][0].split(";")[0];
-
-      const response = await request(app)
+      const response = await request(server)
         .get("/api/user")
         .set("Cookie", jwtToken)
         .expect(200);
 
-      expect(response.body.length).toBe(2);
+      expect(response.body.length).toBe(3);
     });
   });
 
   describe("GET /api/user/:id", () => {
     it("should get a user by id", async () => {
-      const user = new User({
-        username: "testuser",
-        email: "test@example.com",
-        password: await authService.hashPassword("password"),
-      });
-      await userRepository.save(user);
+      const { user, jwtToken } =
+        await createAndLoginUserAndReturnUserAndToken();
 
-      const loginData = {
-        email: "test@example.com",
-        password: "password",
-      };
-
-      const loginResponse = await request(app)
-        .post("/api/user/login")
-        .send(loginData)
-        .expect(200);
-
-      const jwtToken = loginResponse.headers["set-cookie"][0].split(";")[0];
-
-      const response = await request(app)
+      const response = await request(server)
         .get(`/api/user/${user.id}`)
         .set("Cookie", jwtToken)
         .expect(200);

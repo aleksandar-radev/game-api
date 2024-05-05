@@ -5,9 +5,9 @@ import multer from "multer";
 import cookieParser from "cookie-parser";
 import { addRoutes } from "./routes/routes";
 import dotenv from "dotenv";
-import { AppDataSource } from "./database/connection";
+import { Server } from "http";
 
-export async function createApp(): Promise<Application> {
+export async function createServer(): Promise<Server> {
   dotenv.config();
   const app: Express = express();
   const PORT =
@@ -17,14 +17,6 @@ export async function createApp(): Promise<Application> {
     throw new Error("PORT is not defined");
   }
 
-  await AppDataSource.initialize()
-    .then(() => {
-      console.log("Data Source has been initialized!");
-    })
-    .catch((err) => {
-      console.error("Error during Data Source initialization", err);
-    });
-
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(multer().any());
@@ -33,7 +25,7 @@ export async function createApp(): Promise<Application> {
   addRoutes(app); // adds all routes from ./routes
 
   // start server
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
 
@@ -49,7 +41,7 @@ export async function createApp(): Promise<Application> {
     logger.error("Unhandled Rejection at:", reason);
   });
 
-  return app;
+  return server;
 }
 
-export default createApp;
+export default createServer;

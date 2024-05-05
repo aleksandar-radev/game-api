@@ -67,6 +67,7 @@ export class UserController {
 
   @Post("/logout")
   @HttpCode(200)
+  @UseBefore(AuthMiddleware)
   async logout(@Req() req: AuthRequest, @Res() res: Response) {
     this.authService.clearToken(res);
     return { message: "Successfully logged out" };

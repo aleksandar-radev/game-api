@@ -1,3 +1,12 @@
-import { createApp } from "./app";
+import { createServer } from "./app";
+import { AppDataSource } from "./database/connection";
 
-createApp();
+createServer();
+
+AppDataSource.initialize()
+  .then(() => {
+    console.log("Data Source has been initialized!");
+  })
+  .catch((err) => {
+    console.error("Error during Data Source initialization", err);
+  });
