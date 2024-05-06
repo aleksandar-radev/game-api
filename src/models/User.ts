@@ -18,13 +18,13 @@ export class User {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @Column({ unique: true, nullable: true })
+  @Column({ nullable: true })
   username?: string;
 
   @Column()
   password!: string;
 
-  @Column({ unique: true })
+  @Column()
   email!: string;
 
   @Column({ type: "timestamp", default: () => "now()" })
