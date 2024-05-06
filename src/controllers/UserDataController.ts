@@ -1,29 +1,54 @@
-import { Controller, Get, Post, Body, Patch, Param } from "routing-controllers";
-import { Service } from "typedi";
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  UseBefore,
+  Req,
+} from "routing-controllers";
+import { Inject, Service } from "typedi";
 import { UserDataService } from "../services/UserDataService";
 import { CreateUserDataDto } from "../dto/CreateUserDataDto";
 import { UpdateUserDataDto } from "../dto/UpdateUserDataDto";
+import { UserDataRepository } from "../repositories/UserDataRepository";
+import { AuthMiddleware } from "../middleware/AuthMiddleware";
+import { AuthRequest } from "../helpers/request";
 
 @Service()
 @Controller("/user-data")
+@UseBefore(AuthMiddleware)
 export class UserDataController {
-  constructor(private readonly userDataService: UserDataService) {}
+  constructor(
+    @Inject() private userDataService: UserDataService,
+    @Inject() private userDataRepository: UserDataRepository
+  ) {}
 
   @Post("/")
-  create(@Body() createUserDataDto: CreateUserDataDto) {
-    return this.userDataService.createUserData(createUserDataDto);
+  async create(
+    @Req() req: AuthRequest,
+    @Body() createUserDataDto: CreateUserDataDto
+  ) {
+    const userId = req.user.id;
+    const userData = this.userDataRepository.create({
+      ...createUserDataDto,
+      user: { id: userId },
+    });
+
+    return await this.userDataRepository.save(userData);
   }
 
   @Get("/:id")
-  findOne(@Param("id") id: number) {
-    return this.userDataService.getUserDataById(id);
+  async findOne(@Param("id") id: number) {
+    return await this.userDataRepository.findOne({ where: { id } });
   }
 
   @Patch("/:id")
-  update(
+  async update(
     @Param("id") id: number,
     @Body() updateUserDataDto: UpdateUserDataDto
   ) {
-    return this.userDataService.updateUserData(id, updateUserDataDto);
+    return await this.userDataRepository.updateAndGet(id, updateUserDataDto);
   }
 }

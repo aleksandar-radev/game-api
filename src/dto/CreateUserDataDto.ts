@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateUserDataDto {
   @IsOptional()
@@ -18,5 +18,5 @@ export class CreateUserDataDto {
   premium?: string;
 
   @IsOptional()
-  data_json?: any;
+  data_json: any = "{}";
 }

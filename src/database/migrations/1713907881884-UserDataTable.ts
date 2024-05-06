@@ -11,23 +11,34 @@ export class UserDataTable1713907881884 implements MigrationInterface {
             type: "int",
             isPrimary: true,
             isGenerated: true,
+            unsigned: true,
             generationStrategy: "increment",
+          },
+          {
+            name: "user_id",
+            type: "int",
+            isNullable: false,
+            unsigned: true,
           },
           {
             name: "data_json",
             type: "jsonb",
+            isNullable: true,
           },
           {
             name: "highest_level",
             type: "int",
+            isNullable: true,
           },
           {
             name: "total_experience",
             type: "int",
+            isNullable: true,
           },
           {
             name: "total_gold",
             type: "int",
+            isNullable: true,
           },
           {
             name: "premium",
@@ -37,12 +48,29 @@ export class UserDataTable1713907881884 implements MigrationInterface {
           {
             name: "created_at",
             type: "timestamp",
-            default: "CURRENT_TIMESTAMP",
+            default: "now()",
           },
           {
             name: "updated_at",
             type: "timestamp",
-            default: "CURRENT_TIMESTAMP",
+            default: "now()",
+          },
+        ],
+        foreignKeys: [
+          {
+            name: "FK_USER_DATA_USER_ID",
+            columnNames: ["user_id"],
+            referencedTableName: "users",
+            referencedColumnNames: ["id"],
+            onDelete: "CASCADE",
+            onUpdate: "NO ACTION",
+          },
+        ],
+        indices: [
+          {
+            name: "IDX_USER_DATA_USER_ID_PREMIUM",
+            columnNames: ["user_id", "premium"],
+            isUnique: true,
           },
         ],
       })

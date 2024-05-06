@@ -10,10 +10,12 @@
     "lint": "eslint . --ext .ts",
     "test": "jest --no-cache  --detectOpenHandles --runInBand --forceExit",
     "typeorm": "typeorm-ts-node-commonjs",
+    "migration:generate": "yarn typeorm migration:generate ./src/database/migrations/sync -d ./src/database/connection.ts",
     "migration:create": "cd ./src/database/migrations && typeorm migration:create",
     "migration:run": "yarn typeorm migration:run -d ./src/database/connection.ts",
     "migration:revert": "yarn typeorm migration:revert -d ./src/database/connection.ts",
-    "migration:show": "yarn typeorm migration:show -d ./src/database/connection.ts"
+    "migration:show": "yarn typeorm migration:show -d ./src/database/connection.ts",
+    "seed": "ts-node ./src/database/seeds/runSeed.ts"
   },
   "keywords": [],
   "author": "",

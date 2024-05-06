@@ -11,12 +11,14 @@ export class Init1713907859457 implements MigrationInterface {
             type: "int",
             isPrimary: true,
             isGenerated: true,
+            unsigned: true,
             generationStrategy: "increment",
           },
           {
             name: "username",
             type: "varchar",
             isUnique: true,
+            isNullable: true,
           },
           {
             name: "password",
@@ -30,12 +32,12 @@ export class Init1713907859457 implements MigrationInterface {
           {
             name: "created_at",
             type: "timestamp",
-            default: "CURRENT_TIMESTAMP",
+            default: "now()",
           },
           {
             name: "updated_at",
             type: "timestamp",
-            default: "CURRENT_TIMESTAMP",
+            default: "now()",
           },
         ],
       }),

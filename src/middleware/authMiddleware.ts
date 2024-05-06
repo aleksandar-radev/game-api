@@ -31,7 +31,7 @@ export class AuthMiddleware implements ExpressMiddlewareInterface {
       });
 
       if (!user) {
-        throw new AuthenticationError("User not found");
+        throw new AuthenticationError("User not found/authenticated");
       }
 
       req.user = user;

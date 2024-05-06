@@ -17,7 +17,7 @@ import { AuthenticationError } from "../helpers/error";
 import { UserRepository } from "../repositories/UserRepository";
 import { RegisterUserDto } from "../dto/RegisterUserDto";
 
-@Controller("/api/user")
+@Controller("/user")
 @Service()
 export class UserController {
   constructor(

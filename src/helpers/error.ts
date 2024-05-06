@@ -1,3 +1,5 @@
+import { BadRequestError as RoutingControllersBadRequestError } from "routing-controllers";
+
 class AuthenticationError extends Error {
   constructor(message: string) {
     super(message);
@@ -19,4 +21,14 @@ class DbNotFoundException extends Error {
   }
 }
 
-export { AuthenticationError, BadRequestError, DbNotFoundException };
+interface IRoutingControllersBadRequestError
+  extends RoutingControllersBadRequestError {
+  errors?: any[];
+}
+
+export {
+  AuthenticationError,
+  BadRequestError,
+  DbNotFoundException,
+  IRoutingControllersBadRequestError,
+};

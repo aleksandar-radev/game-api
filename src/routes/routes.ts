@@ -15,6 +15,7 @@ export const addRoutes = (app: express.Express) => {
   useExpressServer(app, {
     controllers: [UserController, UserDataController],
     middlewares: [ErrorMiddleware],
+    routePrefix: "/api",
     defaultErrorHandler: false, // Disable default error handling
   });
 };
