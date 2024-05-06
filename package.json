@@ -10,7 +10,7 @@
     "lint": "eslint . --ext .ts",
     "test": "jest --no-cache  --detectOpenHandles --runInBand --forceExit",
     "typeorm": "typeorm-ts-node-commonjs",
-    "migration:generate": "yarn typeorm migration:generate ./src/database/migrations/sync -d ./src/database/connection.ts",
+    "migration:generate": "yarn typeorm migration:generate -d ./src/database/connection.ts ./src/database/migrations/$0",
     "migration:create": "cd ./src/database/migrations && typeorm migration:create",
     "migration:run": "yarn typeorm migration:run -d ./src/database/connection.ts",
     "migration:revert": "yarn typeorm migration:revert -d ./src/database/connection.ts",
@@ -61,5 +61,6 @@
   },
   "engines": {
     "node": ">=18.0.0"
-  }
+  },
+  "packageManager": "yarn@4.2.1"
 }
