@@ -36,6 +36,15 @@ export class UserDataController {
       user: { id: userId },
     });
 
+    const userDataExists = await this.userDataRepository.getByUserIdAndPremium(
+      userId,
+      userData.premium
+    );
+
+    if (userDataExists) {
+      throw new Error("User data already exists");
+    }
+
     return await this.userDataRepository.save(userData);
   }
 

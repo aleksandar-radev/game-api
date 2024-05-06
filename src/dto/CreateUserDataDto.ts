@@ -1,4 +1,5 @@
-import { IsNumber, IsOptional, IsString } from "class-validator";
+import { IsIn, IsNumber, IsOptional, IsString } from "class-validator";
+import { UserData } from "../models/UserData";
 
 export class CreateUserDataDto {
   @IsOptional()
@@ -15,7 +16,8 @@ export class CreateUserDataDto {
 
   @IsOptional()
   @IsString()
-  premium?: string;
+  @IsIn([UserData.PREMIUM_NO, UserData.PREMIUM_YES, UserData.PREMIUM_TEST])
+  premium: string = UserData.PREMIUM_NO;
 
   @IsOptional()
   data_json: any = "{}";

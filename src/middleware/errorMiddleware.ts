@@ -50,6 +50,7 @@ export class ErrorMiddleware implements ExpressErrorMiddlewareInterface {
           message: message,
           errors: validationErrors,
         };
+        console.log(errorResponse);
         return res.status(httpCode).json(errorResponse);
       }
     }

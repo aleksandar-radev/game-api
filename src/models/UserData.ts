@@ -2,7 +2,6 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToOne,
   JoinColumn,
   ManyToOne,
   Index,
@@ -14,6 +13,10 @@ import { User } from "./User";
   unique: true,
 })
 export class UserData {
+  public static readonly PREMIUM_NO = "no";
+  public static readonly PREMIUM_YES = "yes";
+  public static readonly PREMIUM_TEST = "test";
+
   @PrimaryGeneratedColumn()
   id?: number;
 
@@ -40,8 +43,8 @@ export class UserData {
   @Column({ nullable: true })
   total_gold?: number;
 
-  @Column({ default: "no" })
-  premium?: string;
+  @Column({ default: UserData.PREMIUM_NO })
+  premium!: string;
 
   @Column({ type: "timestamp", default: () => "now()" })
   created_at!: Date;
