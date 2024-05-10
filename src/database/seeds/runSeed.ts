@@ -1,6 +1,7 @@
 import readline from "readline";
 import { AppDataSource } from "../connection";
-import { seedUsers } from "./users";
+import { UserSeeder } from "./UserSeeder";
+import { UserDataSeeder } from "./userDataSeeder";
 
 async function runSeed() {
   try {
@@ -41,7 +42,7 @@ async function runSeed() {
     });
 
     rl.question(
-      "Do you want to run all migrations again? (y/n): ",
+      "Do you want to run all migrations again? This deletes all data. (y/n): ",
       async (answer) => {
         if (answer.toLowerCase() === "y") {
           console.log("Running all migrations again...");
@@ -62,7 +63,11 @@ async function runSeed() {
         }
 
         // Start seeding
-        await seedUsers(AppDataSource);
+        const userSeeder = new UserSeeder(AppDataSource);
+        await userSeeder.seed();
+        // Start seeding
+        const userDataSeeder = new UserDataSeeder(AppDataSource);
+        await userDataSeeder.seed();
         console.log("Seeding completed successfully!");
 
         await AppDataSource.destroy();

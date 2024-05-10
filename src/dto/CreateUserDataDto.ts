@@ -20,5 +20,5 @@ export class CreateUserDataDto {
   premium: string = UserData.PREMIUM_NO;
 
   @IsOptional()
-  data_json: any = "{}";
+  data_json: any;
 }

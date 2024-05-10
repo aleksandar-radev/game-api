@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import { addRoutes } from "./routes/routes";
 import dotenv from "dotenv";
 import { Server } from "http";
+import cors from "cors";
 
 export async function createServer(): Promise<Server> {
   dotenv.config();
@@ -21,6 +22,12 @@ export async function createServer(): Promise<Server> {
   app.use(express.urlencoded({ extended: true }));
   app.use(multer().any());
   app.use(cookieParser());
+  app.use(
+    cors({
+      credentials: true,
+      origin: process.env.ALLOWED_ORIGINS?.split(",") || [],
+    })
+  );
 
   addRoutes(app); // adds all routes from ./routes
 

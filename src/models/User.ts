@@ -4,6 +4,8 @@ import {
   Column,
   OneToMany,
   Index,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { UserData } from "./UserData";
 
@@ -15,6 +17,9 @@ import { UserData } from "./UserData";
   unique: true,
 })
 export class User {
+  public static readonly ROLE_ADMIN = "admin";
+  public static readonly ROLE_USER = "user";
+  public static readonly ROLE_TESTER = "tester";
   @PrimaryGeneratedColumn()
   id?: number;
 
@@ -27,10 +32,13 @@ export class User {
   @Column()
   email!: string;
 
-  @Column({ type: "timestamp", default: () => "now()" })
+  @Column({ default: User.ROLE_USER })
+  role!: string;
+
+  @CreateDateColumn()
   created_at!: Date;
 
-  @Column({ type: "timestamp", default: () => "now()" })
+  @UpdateDateColumn()
   updated_at!: Date;
 
   @OneToMany(() => UserData, (userData) => userData.user)

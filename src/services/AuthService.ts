@@ -25,8 +25,8 @@ export class AuthService extends BaseService {
 
     res.cookie("jwt", token, {
       httpOnly: true,
-      secure: process.env.ENV !== "local",
-      sameSite: "strict",
+      secure: true,
+      sameSite: "none",
       maxAge: 30 * 60 * 60 * 24 * 1000,
     });
   }

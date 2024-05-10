@@ -16,13 +16,17 @@ import { AuthService } from "../services/AuthService";
 import { AuthenticationError } from "../helpers/error";
 import { UserRepository } from "../repositories/UserRepository";
 import { RegisterUserDto } from "../dto/RegisterUserDto";
+import { UserResponseDto } from "../dto/UserResponseDto";
+import { plainToClass } from "class-transformer";
+import { UserDataRepository } from "../repositories/UserDataRepository";
 
 @Controller("/user")
 @Service()
 export class UserController {
   constructor(
     @Inject() private authService: AuthService,
-    @Inject() private userRepository: UserRepository
+    @Inject() private userRepository: UserRepository,
+    @Inject() private userDataRepository: UserDataRepository
   ) {}
 
   @Post("/register")
@@ -38,6 +42,12 @@ export class UserController {
     );
 
     const user = await this.authService.createUser(username, email, password);
+
+    const userData = this.userDataRepository.create({
+      user: { id: user.id },
+    });
+    await this.userDataRepository.save(userData);
+
     this.authService.generateToken(res, user);
     return user;
   }
@@ -62,7 +72,15 @@ export class UserController {
     }
 
     this.authService.generateToken(res, user);
-    return user;
+
+    return plainToClass(UserResponseDto, user);
+  }
+
+  @Get("/session")
+  @HttpCode(200)
+  @UseBefore(AuthMiddleware)
+  async session(@Req() req: AuthRequest, @Res() res: Response) {
+    return { user: plainToClass(UserResponseDto, req.user) };
   }
 
   @Post("/logout")

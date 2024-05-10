@@ -32,7 +32,7 @@ export class UserData {
   user!: User;
 
   @Column({ type: "jsonb", nullable: true })
-  data_json?: object;
+  data_json?: Object;
 
   @Column({ nullable: true })
   highest_level?: number;

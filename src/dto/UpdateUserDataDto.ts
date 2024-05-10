@@ -1,9 +1,6 @@
-import { IsInt, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsInt, IsJSON, IsNumber, IsOptional, IsString } from "class-validator";
 
-export class UpdateUserDataDto {
-  @IsInt()
-  id!: number;
-
+export class UpdateUserDataRequestDto {
   @IsOptional()
   @IsNumber()
   highest_level?: number;
@@ -21,5 +18,6 @@ export class UpdateUserDataDto {
   premium?: string;
 
   @IsOptional()
+  @IsString()
   data_json?: any;
 }
