@@ -13,10 +13,8 @@ export class UserDataRepository extends Repository<UserData> {
     id: number,
     userData: Partial<UserData>
   ): Promise<UserData | null> {
-    console.log(userData);
-
-    await this.update(id, userData);
-    return this.findOne({ where: { id } });
+    await this.update({ user: { id }, premium: userData.premium }, userData);
+    return this.findOne({ where: { user: { id }, premium: userData.premium } });
   }
 
   async getByUserIdAndPremium(

@@ -17,9 +17,10 @@ import { UserDataRepository } from "../repositories/UserDataRepository";
 import { AuthMiddleware } from "../middleware/AuthMiddleware";
 import { AuthRequest } from "../helpers/request";
 import { UserRepository } from "../repositories/UserRepository";
-import { plainToClass } from "class-transformer";
+import { plainToInstance } from "class-transformer";
 import { UserDataResponseDto } from "../dto/UserDataResponseDto";
 import crypt from "../helpers/crypt";
+import { get } from "http";
 
 @Service()
 @Controller("/user-data")
@@ -54,6 +55,11 @@ export class UserDataController {
     return await this.userDataRepository.save(userData);
   }
 
+  @Get("/leaderboard")
+  async leaderboard(@Req() req: AuthRequest) {
+    return this.userDataService.getLeaderboardData();
+  }
+
   @Get("/:userId")
   async findOne(
     @Req() req: AuthRequest,
@@ -74,31 +80,33 @@ export class UserDataController {
       throw new Error("User data not found / Unauthorized");
     }
 
-    return plainToClass(UserDataResponseDto, userData);
+    return plainToInstance(UserDataResponseDto, userData);
   }
 
   @Get("/")
   async findAll(@Req() req: AuthRequest) {
-    const loggedInUser = req.user;
+    // const loggedInUser = req.user;
     return await this.userDataRepository.find({
-      where: { user: { id: loggedInUser.id } },
+      // where: { user: { id: loggedInUser.id } },
       relations: ["user"],
     });
   }
 
   @Patch("/:id")
   async update(
-    @Param("id") id: number,
+    @Param("id") userId: number,
+    @Req() req: AuthRequest,
     @Body() updateUserDataDto: UpdateUserDataRequestDto
   ) {
+    const loggedInUser = req.user;
+
+    if (userId !== loggedInUser.id && loggedInUser?.role !== "admin") {
+      throw new Error("User data not found / Unauthorized");
+    }
+
     const decryptedData = crypt.decrypt(updateUserDataDto.data_json);
-
     const formattedData = this.userDataService.formatDataJson(decryptedData);
-
     // this.userDataService.validateDataJson(decryptedData);
-    return await this.userDataRepository.updateAndGet(id, {
-      ...updateUserDataDto,
-      data_json: decryptedData,
-    });
+    return await this.userDataRepository.updateAndGet(userId, formattedData);
   }
 }

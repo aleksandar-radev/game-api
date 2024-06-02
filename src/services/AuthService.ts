@@ -33,6 +33,7 @@ export class AuthService extends BaseService {
 
   clearToken(res: Response) {
     res.cookie("jwt", "", {
+      secure: true,
       httpOnly: true,
       expires: new Date(0),
     });

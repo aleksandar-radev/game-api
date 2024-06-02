@@ -1,12 +1,10 @@
-import { CreateUserDataDto } from "../dto/CreateUserDataDto";
-import { UpdateUserDataRequestDto } from "../dto/UpdateUserDataDto";
 import { BaseService } from "./BaseService";
 import { Inject, Service } from "typedi";
 import { UserDataRepository } from "../repositories/UserDataRepository";
 import { BadRequestError } from "../helpers/error";
-import { PlainData } from "simple-crypto-js";
-import { UserData } from "../models/UserData";
 import { UserDataDto } from "../dto/UserDataDto";
+import { plainToInstance } from "class-transformer";
+import { LeaderboardUserDataDto } from "../dto/LeaderboardUserDataDto";
 
 @Service()
 export class UserDataService extends BaseService {
@@ -33,13 +31,28 @@ export class UserDataService extends BaseService {
     const parsedData = decryptedData;
     // Format the decrypted data and return a UserDataDto object
     const formattedData: UserDataDto = {
-      highest_level: parsedData.highest_level,
-      total_experience: parsedData.total_experience,
-      total_gold: parsedData.total_gold,
-      premium: parsedData.premium,
-      data_json: parsedData,
+      highest_level: parsedData.highestLevel || 0,
+      total_experience: parsedData.totalExperience || 0,
+      total_gold: parsedData.totalGold || 0,
+      premium: parsedData.premium || "no",
+      data_json: parsedData || {},
     };
 
     return formattedData;
+  }
+
+  async getLeaderboardData() {
+    const leaderboardData = await this.userDataRepository.find({
+      order: { highest_level: "DESC" },
+      relations: ["user"],
+      take: 100,
+    });
+
+    return leaderboardData.map((data) => {
+      const plainData = plainToInstance(LeaderboardUserDataDto, data, {
+        excludeExtraneousValues: true,
+      });
+      return plainData;
+    });
   }
 }

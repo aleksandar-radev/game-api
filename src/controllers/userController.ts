@@ -17,7 +17,7 @@ import { AuthenticationError } from "../helpers/error";
 import { UserRepository } from "../repositories/UserRepository";
 import { RegisterUserDto } from "../dto/RegisterUserDto";
 import { UserResponseDto } from "../dto/UserResponseDto";
-import { plainToClass } from "class-transformer";
+import { plainToInstance } from "class-transformer";
 import { UserDataRepository } from "../repositories/UserDataRepository";
 
 @Controller("/user")
@@ -73,14 +73,14 @@ export class UserController {
 
     this.authService.generateToken(res, user);
 
-    return plainToClass(UserResponseDto, user);
+    return plainToInstance(UserResponseDto, user);
   }
 
   @Get("/session")
   @HttpCode(200)
   @UseBefore(AuthMiddleware)
   async session(@Req() req: AuthRequest, @Res() res: Response) {
-    return { user: plainToClass(UserResponseDto, req.user) };
+    return { user: plainToInstance(UserResponseDto, req.user) };
   }
 
   @Post("/logout")

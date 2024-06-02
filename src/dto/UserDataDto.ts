@@ -15,7 +15,7 @@ export class UserDataDto {
 
   @IsOptional()
   @IsString()
-  premium!: string;
+  premium?: string;
 
   @IsOptional()
   @IsJSON()
