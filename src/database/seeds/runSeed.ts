@@ -1,7 +1,7 @@
 import readline from "readline";
 import { AppDataSource } from "../connection";
 import { UserSeeder } from "./UserSeeder";
-import { UserDataSeeder } from "./userDataSeeder";
+import { UserDataSeeder } from "./UserDataSeeder";
 
 async function runSeed() {
   try {

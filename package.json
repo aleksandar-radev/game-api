@@ -15,7 +15,7 @@
     "migration:run": "yarn typeorm migration:run -d ./src/database/connection.ts",
     "migration:revert": "yarn typeorm migration:revert -d ./src/database/connection.ts",
     "migration:show": "yarn typeorm migration:show -d ./src/database/connection.ts",
-    "seed": "ts-node ./src/database/seeds/runSeed.ts"
+    "seed": "ts-node ./src/database/seeds/RunSeed.ts"
   },
   "keywords": [],
   "author": "",
@@ -58,11 +58,10 @@
     "supertest": "^7.0.0",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
-    "typeorm-seeding": "^1.6.1",
     "typescript": "^5.3.3"
   },
   "engines": {
     "node": ">=18.0.0"
   },
-  "packageManager": "yarn@4.2.1"
+  "packageManager": "yarn@4.3.1"
 }

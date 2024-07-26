@@ -41,6 +41,9 @@ export class User {
   @UpdateDateColumn()
   updated_at!: Date;
 
+  @UpdateDateColumn()
+  last_active!: Date;
+
   @OneToMany(() => UserData, (userData) => userData.user)
   userData?: UserData[];
 
