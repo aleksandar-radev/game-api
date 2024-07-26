@@ -11,7 +11,7 @@ RUN corepack enable
 RUN yarn set version stable
 
 # Install dependencies
-RUN yarn install
+RUN yarn install --verbose
 RUN yarn
 
 # Copy the rest of your application code
