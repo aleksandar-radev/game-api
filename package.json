@@ -36,10 +36,10 @@
     "reflect-metadata": "^0.2.2",
     "routing-controllers": "^0.10.4",
     "simple-crypto-js": "^3.0.1",
+    "ts-node": "^10.9.2",
     "typedi": "^0.10.0",
     "typeorm": "^0.3.20",
     "winston": "^3.13.0",
-    "ts-node": "^10.9.2",
     "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
