@@ -8,6 +8,7 @@ COPY ["package.json", "yarn.lock", ".yarnrc.yml", ".env", "./"]
 
 # Enable yarn
 RUN corepack enable
+RUN yarn set version stable
 RUN yarn install
 
 # Copy the rest of your application code
@@ -23,7 +24,7 @@ WORKDIR /usr/src/app
 
 # Copy the build artifacts from the builder stage
 COPY --from=builder /usr/src/app/dist ./dist
-COPY ["package.json", "yarn.lock", ".env", "./"]
+COPY ["package.json", "yarn.lock", ".yarnrc.yml", ".env", "./"]
 
 # Install only production dependencies
 RUN corepack enable
