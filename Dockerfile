@@ -4,14 +4,14 @@ FROM node:22-alpine as builder
 WORKDIR /usr/src/app
 
 # Copy package.json and yarn.lock files
-COPY ["package.json", "yarn.lock", ".env", "./"]
+COPY ["package.json", "yarn.lock", ".yarnrc.yml", ".env", "./"]
 
 # Enable yarn
 RUN corepack enable
 RUN yarn set version stable
+RUN yarn install
 
 # Install dependencies
-RUN yarn install --verbose
 RUN yarn
 
 # Copy the rest of your application code
