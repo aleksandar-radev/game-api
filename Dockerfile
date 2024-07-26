@@ -11,9 +11,6 @@ RUN corepack enable
 RUN yarn set version stable
 RUN yarn install
 
-# Install dependencies
-RUN yarn
-
 # Copy the rest of your application code
 COPY . .
 
@@ -29,13 +26,8 @@ WORKDIR /usr/src/app
 COPY --from=builder /usr/src/app/dist ./dist
 COPY ["package.json", "yarn.lock", ".env", "./"]
 
-# Enable yarn
-RUN corepack enable
-RUN yarn set version stable
-RUN yarn install
-
 # Install only production dependencies
-RUN yarn --production
+RUN yarn workspaces focus --production
 
 # Create a non-root user and switch to it
 RUN adduser -D myuser
