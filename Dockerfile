@@ -8,7 +8,6 @@ COPY ["package.json", "yarn.lock", ".yarnrc.yml", ".env", "./"]
 
 # Enable yarn
 RUN corepack enable
-RUN yarn set version stable
 RUN yarn install
 
 # Copy the rest of your application code
@@ -27,6 +26,8 @@ COPY --from=builder /usr/src/app/dist ./dist
 COPY ["package.json", "yarn.lock", ".env", "./"]
 
 # Install only production dependencies
+RUN corepack enable
+RUN yarn set version stable
 RUN yarn workspaces focus --production
 
 # Create a non-root user and switch to it
