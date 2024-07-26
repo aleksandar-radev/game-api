@@ -29,6 +29,11 @@ WORKDIR /usr/src/app
 COPY --from=builder /usr/src/app/dist ./dist
 COPY ["package.json", "yarn.lock", ".env", "./"]
 
+# Enable yarn
+RUN corepack enable
+RUN yarn set version stable
+RUN yarn install
+
 # Install only production dependencies
 RUN yarn --production
 
