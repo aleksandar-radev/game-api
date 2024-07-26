@@ -6,7 +6,6 @@ import { User } from "../../models/User";
 import { Container } from "typedi";
 import { createServer } from "../../app";
 import { Server } from "http";
-import { createConnection } from "typeorm-seeding";
 import { testConfig } from "../../../ormconfig";
 import { DataSource } from "typeorm";
 
@@ -18,7 +17,8 @@ describe("UserController", () => {
 
   beforeAll(async () => {
     server = await createServer();
-    dataSource = await createConnection(testConfig);
+    dataSource = new DataSource(testConfig);
+    await dataSource.initialize();
     await AppDataSource.initialize();
   });
 

@@ -1,10 +1,10 @@
 import { Request } from "express";
-import pagination from "./pagination";
+import { pagination } from "./pagination";
 import * as sorting from "./sorting";
-import { IUser } from "../models/User";
+import { User } from "../models/User";
 
 export interface AuthRequest extends Request {
-  user?: IUser;
+  user?: User;
 }
 
 // Assuming `getPaginationOptions` and `getSortingOptions` return objects of a known structure,

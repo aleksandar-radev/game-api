@@ -37,6 +37,9 @@ export class UserDataController {
     @Req() req: AuthRequest,
     @Body() createUserDataDto: CreateUserDataDto
   ) {
+    if (!req.user?.id) {
+      throw new Error("Unexpected error, user not logged in");
+    }
     const userId = req.user.id;
     const userData = this.userDataRepository.create({
       ...createUserDataDto,
@@ -66,6 +69,9 @@ export class UserDataController {
     @Param("userId") userId: number,
     @QueryParam("premium") premium: string = "no"
   ) {
+    if (!req.user?.id) {
+      throw new Error("Unexpected error, user not logged in");
+    }
     const loggedInUser = req.user;
 
     const userData = await this.userDataRepository.findOne({
@@ -98,6 +104,9 @@ export class UserDataController {
     @Req() req: AuthRequest,
     @Body() updateUserDataDto: UpdateUserDataRequestDto
   ) {
+    if (!req.user?.id) {
+      throw new Error("Unexpected error, user not logged in");
+    }
     const loggedInUser = req.user;
 
     if (userId !== loggedInUser.id && loggedInUser?.role !== "admin") {
