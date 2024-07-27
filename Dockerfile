@@ -15,6 +15,7 @@ RUN yarn install
 COPY . .
 
 # Build the application
+RUN chmod +x ./scripts/update.sh 
 RUN yarn build 
 
 # Stage 2: Prepare the production image
