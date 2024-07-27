@@ -14,6 +14,12 @@ RUN yarn install
 # Copy the rest of your application code
 COPY . .
 
+# Copy scripts:
+COPY scripts ./scripts
+
+# Ensure the script is executable
+RUN chmod +x ./scripts/update.sh
+
 # Build the application
 RUN yarn build 
 
