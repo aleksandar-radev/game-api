@@ -4,14 +4,14 @@
   "description": "",
   "main": "dist/app.js",
   "scripts": {
-    "build": "./scripts/update.sh build",
+    "build": "sh -c '$INIT_CWD/scripts/update.sh build'",
+    "seed": "sh -c '$INIT_CWD/scripts/update.sh seed'",
     "start": "node dist/app.js",
     "dev": "nodemon --exec ts-node src/server.ts",
     "lint": "eslint . --ext .ts",
     "test": "jest --no-cache  --detectOpenHandles --runInBand --forceExit",
     "typeorm": "typeorm-ts-node-commonjs",
-    "seed": "./scripts/update.sh seed",
-    "migration": "./scripts/update.sh migration"
+    "migration": "sh -c '$INIT_CWD/scripts/update.sh migration'"
   },
   "keywords": [],
   "author": "",
