@@ -20,8 +20,8 @@ COPY scripts ./scripts
 # Ensure the script is executable
 RUN chmod +x ./scripts/update.sh
 
-RUN ls -la
-RUN cat ./scripts/update.sh
+RUN find . -type d
+
 # Build the application
 RUN yarn build 
 
