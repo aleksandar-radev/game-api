@@ -21,7 +21,7 @@ COPY scripts ./scripts
 RUN chmod +x ./scripts/update.sh
 
 RUN ls -la
-
+RUN cat ./scripts/update.sh
 # Build the application
 RUN yarn build 
 
