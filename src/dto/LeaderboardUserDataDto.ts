@@ -1,5 +1,5 @@
-import { Exclude, Expose, Type } from "class-transformer";
-import { LeaderboardUserDto } from "./LeaderboardUserDto";
+import { Exclude, Expose, Type } from 'class-transformer';
+import { LeaderboardUserDto } from './LeaderboardUserDto';
 
 @Exclude()
 export class LeaderboardUserDataDto {

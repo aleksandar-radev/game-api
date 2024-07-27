@@ -1,10 +1,10 @@
-import { BaseService } from "./BaseService";
-import { Inject, Service } from "typedi";
-import { UserDataRepository } from "../repositories/UserDataRepository";
-import { BadRequestError } from "../helpers/error";
-import { UserDataDto } from "../dto/UserDataDto";
-import { plainToInstance } from "class-transformer";
-import { LeaderboardUserDataDto } from "../dto/LeaderboardUserDataDto";
+import { BaseService } from './BaseService';
+import { Inject, Service } from 'typedi';
+import { UserDataRepository } from '../repositories/UserDataRepository';
+import { BadRequestError } from '../helpers/error';
+import { UserDataDto } from '../dto/UserDataDto';
+import { plainToInstance } from 'class-transformer';
+import { LeaderboardUserDataDto } from '../dto/LeaderboardUserDataDto';
 
 @Service()
 export class UserDataService extends BaseService {
@@ -15,12 +15,12 @@ export class UserDataService extends BaseService {
   validateDataJson(dataJson: string) {
     let json;
     if (!dataJson) {
-      throw new BadRequestError("Data JSON is required");
+      throw new BadRequestError('Data JSON is required');
     }
     try {
       json = JSON.parse(dataJson);
     } catch (e) {
-      throw new BadRequestError("Data JSON is invalid");
+      throw new BadRequestError('Data JSON is invalid');
     }
 
     // if (!json.name) {
@@ -34,7 +34,7 @@ export class UserDataService extends BaseService {
       highest_level: parsedData.highestLevel || 0,
       total_experience: parsedData.totalExperience || 0,
       total_gold: parsedData.totalGold || 0,
-      premium: parsedData.premium || "no",
+      premium: parsedData.premium || 'no',
       data_json: parsedData || {},
     };
 
@@ -43,8 +43,8 @@ export class UserDataService extends BaseService {
 
   async getLeaderboardData() {
     const leaderboardData = await this.userDataRepository.find({
-      order: { highest_level: "DESC" },
-      relations: ["user"],
+      order: { highest_level: 'DESC' },
+      relations: ['user'],
       take: 100,
     });
 

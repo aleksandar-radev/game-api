@@ -1,5 +1,5 @@
-import { Exclude, Type } from "class-transformer";
-import { UserResponseDto } from "./UserResponseDto";
+import { Exclude, Type } from 'class-transformer';
+import { UserResponseDto } from './UserResponseDto';
 
 export class UserDataResponseDto {
   @Exclude()

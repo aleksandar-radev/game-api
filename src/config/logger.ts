@@ -1,5 +1,5 @@
-import winston from "winston";
-import DailyRotateFile from "winston-daily-rotate-file";
+import winston from 'winston';
+import DailyRotateFile from 'winston-daily-rotate-file';
 
 // https://github.com/winstonjs/winston
 
@@ -23,25 +23,25 @@ const levels = {
 };
 
 // Configure the log directory and log file name
-const logDirectory = "logs";
-const errorFileName = "error-%DATE%.log";
+const logDirectory = 'logs';
+const errorFileName = 'error-%DATE%.log';
 
 // Error log setup with daily rotation
 const errorTransport = new DailyRotateFile({
-  level: "error",
+  level: 'error',
   dirname: logDirectory,
   filename: errorFileName,
-  datePattern: "YYYY-MM-DD",
+  datePattern: 'YYYY-MM-DD',
   zippedArchive: false,
-  maxSize: "20m",
-  maxFiles: "14d",
+  maxSize: '20m',
+  maxFiles: '14d',
 });
 
 const infoTransport = new winston.transports.File({
-  level: "info",
+  level: 'info',
   filename: `${logDirectory}/info.log`,
   format: winston.format.combine(
-    filterOnly("info"), // Apply the filter for only 'info' level logs
+    filterOnly('info'), // Apply the filter for only 'info' level logs
     winston.format.timestamp(),
     winston.format.json(),
     winston.format.printf((info) => {
@@ -51,7 +51,7 @@ const infoTransport = new winston.transports.File({
         message: info.message,
         stack: info.stack,
       });
-    })
+    }),
   ),
   maxsize: 5242880, // 5MB
   maxFiles: 5,
@@ -80,7 +80,7 @@ const logger = winston.createLogger({
         message: info.message,
         stack: info.stack,
       });
-    })
+    }),
   ),
   transports: [errorTransport, infoTransport],
 });

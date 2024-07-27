@@ -1,21 +1,20 @@
-import express, { Application, Express } from "express";
-import "reflect-metadata";
-import logger from "./config/logger";
-import multer from "multer";
-import cookieParser from "cookie-parser";
-import { addRoutes } from "./routes/routes";
-import dotenv from "dotenv";
-import { Server } from "http";
-import cors from "cors";
+import express, { Application, Express } from 'express';
+import 'reflect-metadata';
+import logger from './config/logger';
+import multer from 'multer';
+import cookieParser from 'cookie-parser';
+import { addRoutes } from './routes/routes';
+import dotenv from 'dotenv';
+import { Server } from 'http';
+import cors from 'cors';
 
 export async function createServer(): Promise<Server> {
   dotenv.config();
   const app: Express = express();
-  const PORT =
-    process.env.NODE_ENV === "test" ? 3001 : process.env.PORT || 3000;
+  const PORT = process.env.NODE_ENV === 'test' ? 3001 : process.env.PORT || 3000;
 
   if (!PORT) {
-    throw new Error("PORT is not defined");
+    throw new Error('PORT is not defined');
   }
 
   app.use(express.json());
@@ -25,8 +24,8 @@ export async function createServer(): Promise<Server> {
   app.use(
     cors({
       credentials: true,
-      origin: process.env.ALLOWED_ORIGINS?.split(",") || [],
-    })
+      origin: process.env.ALLOWED_ORIGINS?.split(',') || [],
+    }),
   );
 
   addRoutes(app); // adds all routes from ./routes
@@ -37,15 +36,15 @@ export async function createServer(): Promise<Server> {
   });
 
   // ERROR HANDLING (logging)
-  process.on("uncaughtException", (error) => {
-    console.error("Uncaught Exception:", error);
-    logger.error("Uncaught Exception:", error);
+  process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception:', error);
+    logger.error('Uncaught Exception:', error);
     process.exit(1);
   });
 
-  process.on("unhandledRejection", (reason, promise) => {
-    console.error("Unhandled Rejection at:", promise);
-    logger.error("Unhandled Rejection at:", reason);
+  process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise);
+    logger.error('Unhandled Rejection at:', reason);
   });
 
   return server;

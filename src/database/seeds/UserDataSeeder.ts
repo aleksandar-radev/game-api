@@ -1,17 +1,17 @@
-import { DataSource } from "typeorm";
-import { User } from "../../models/User";
-import { UserData } from "../../models/UserData";
+import { DataSource } from 'typeorm';
+import { User } from '../../models/User';
+import { UserData } from '../../models/UserData';
 
 export class UserDataSeeder {
   constructor(public dataSource: DataSource) {}
   public async seed(): Promise<void> {
-    console.log("Seeding user data");
+    console.log('Seeding user data');
 
     const userRepository = this.dataSource.getRepository(User);
     const userDataRepository = this.dataSource.getRepository(UserData);
 
     if ((await userDataRepository.find()).length > 0) {
-      console.log("User data already seeded");
+      console.log('User data already seeded');
       return;
     }
 
@@ -25,6 +25,6 @@ export class UserDataSeeder {
     }
 
     await userDataRepository.save(userData);
-    console.log("Seeding user data complete --------- ");
+    console.log('Seeding user data complete --------- ');
   }
 }

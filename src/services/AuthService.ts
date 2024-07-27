@@ -1,11 +1,11 @@
-import { UserRepository } from "./../repositories/UserRepository";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { Response } from "express";
-import { User } from "../models/User";
-import { BadRequestError } from "../helpers/error";
-import { BaseService } from "./BaseService";
-import { Inject, Service } from "typedi";
+import { UserRepository } from './../repositories/UserRepository';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { Response } from 'express';
+import { User } from '../models/User';
+import { BadRequestError } from '../helpers/error';
+import { BaseService } from './BaseService';
+import { Inject, Service } from 'typedi';
 
 @Service()
 export class AuthService extends BaseService {
@@ -15,24 +15,24 @@ export class AuthService extends BaseService {
 
   generateToken(res: Response, user: User | undefined) {
     if (!user) {
-      throw new Error("Fatal error. id not found !? #generateToken");
+      throw new Error('Fatal error. id not found !? #generateToken');
     }
     const userId = user.id;
-    const jwtSecret = process.env.JWT_SECRET || "";
+    const jwtSecret = process.env.JWT_SECRET || '';
     const token = jwt.sign({ userId }, jwtSecret, {
-      expiresIn: "30 days",
+      expiresIn: '30 days',
     });
 
-    res.cookie("jwt", token, {
+    res.cookie('jwt', token, {
       httpOnly: true,
       secure: true,
-      sameSite: "none",
+      sameSite: 'none',
       maxAge: 30 * 60 * 60 * 24 * 1000,
     });
   }
 
   clearToken(res: Response) {
-    res.cookie("jwt", "", {
+    res.cookie('jwt', '', {
       secure: true,
       httpOnly: true,
       expires: new Date(0),
@@ -43,22 +43,17 @@ export class AuthService extends BaseService {
     return bcrypt.compare(password, user.password);
   }
 
-  async validateRegistration(
-    username: string,
-    email: string,
-    password: string,
-    confirmPassword: string
-  ) {
+  async validateRegistration(username: string, email: string, password: string, confirmPassword: string) {
     if (!username || !email || !password || !confirmPassword) {
-      throw new BadRequestError("Please provide all required fields");
+      throw new BadRequestError('Please provide all required fields');
     }
 
     if (password !== confirmPassword) {
-      throw new BadRequestError("Passwords do not match");
+      throw new BadRequestError('Passwords do not match');
     }
 
     if (password.length < 6) {
-      throw new BadRequestError("Password must be at least 6 characters");
+      throw new BadRequestError('Password must be at least 6 characters');
     }
 
     const userExists = await this.userRepository.findOne({
@@ -66,7 +61,7 @@ export class AuthService extends BaseService {
     });
 
     if (userExists) {
-      throw new BadRequestError("User already exists");
+      throw new BadRequestError('User already exists');
     }
   }
 

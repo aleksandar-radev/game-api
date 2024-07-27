@@ -1,37 +1,30 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  JoinColumn,
-  ManyToOne,
-  Index,
-} from "typeorm";
-import { User } from "./User";
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, Index } from 'typeorm';
+import { User } from './User';
 
-@Entity("user_data")
-@Index("IDX_USER_DATA_USER_ID_PREMIUM", ["user.id", "premium"], {
+@Entity('user_data')
+@Index('IDX_USER_DATA_USER_ID_PREMIUM', ['user.id', 'premium'], {
   unique: true,
 })
 export class UserData {
-  public static readonly PREMIUM_NO = "no";
-  public static readonly PREMIUM_YES = "yes";
-  public static readonly PREMIUM_TEST = "test";
+  public static readonly PREMIUM_NO = 'no';
+  public static readonly PREMIUM_YES = 'yes';
+  public static readonly PREMIUM_TEST = 'test';
 
   @PrimaryGeneratedColumn()
   id?: number;
 
   @ManyToOne(() => User, {
     nullable: false,
-    onDelete: "CASCADE",
-    onUpdate: "NO ACTION",
+    onDelete: 'CASCADE',
+    onUpdate: 'NO ACTION',
   })
   @JoinColumn({
-    name: "user_id",
-    foreignKeyConstraintName: "FK_USER_DATA_USER_ID",
+    name: 'user_id',
+    foreignKeyConstraintName: 'FK_USER_DATA_USER_ID',
   })
   user!: User;
 
-  @Column({ type: "jsonb", nullable: true })
+  @Column({ type: 'jsonb', nullable: true })
   data_json?: Object;
 
   @Column({ nullable: true })
@@ -46,10 +39,10 @@ export class UserData {
   @Column({ default: UserData.PREMIUM_NO })
   premium!: string;
 
-  @Column({ type: "timestamp", default: () => "now()" })
+  @Column({ type: 'timestamp', default: () => 'now()' })
   created_at!: Date;
 
-  @Column({ type: "timestamp", default: () => "now()" })
+  @Column({ type: 'timestamp', default: () => 'now()' })
   updated_at!: Date;
 
   constructor(config: Partial<UserData>) {

@@ -1,5 +1,5 @@
-import { IsIn, IsNumber, IsOptional, IsString } from "class-validator";
-import { UserData } from "../models/UserData";
+import { IsIn, IsNumber, IsOptional, IsString } from 'class-validator';
+import { UserData } from '../models/UserData';
 
 export class CreateUserDataDto {
   @IsOptional()

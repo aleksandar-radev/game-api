@@ -1,25 +1,17 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  Index,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from "typeorm";
-import { UserData } from "./UserData";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Index, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { UserData } from './UserData';
 
-@Entity("users")
-@Index("IDX_USER_USERNAME", ["username"], {
+@Entity('users')
+@Index('IDX_USER_USERNAME', ['username'], {
   unique: true,
 })
-@Index("IDX_USER_EMAIL", ["email"], {
+@Index('IDX_USER_EMAIL', ['email'], {
   unique: true,
 })
 export class User {
-  public static readonly ROLE_ADMIN = "admin";
-  public static readonly ROLE_USER = "user";
-  public static readonly ROLE_TESTER = "tester";
+  public static readonly ROLE_ADMIN = 'admin';
+  public static readonly ROLE_USER = 'user';
+  public static readonly ROLE_TESTER = 'tester';
   @PrimaryGeneratedColumn()
   id?: number;
 

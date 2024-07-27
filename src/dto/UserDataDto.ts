@@ -1,4 +1,4 @@
-import { IsJSON, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsJSON, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UserDataDto {
   @IsOptional()

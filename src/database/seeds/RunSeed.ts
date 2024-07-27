@@ -1,15 +1,13 @@
-import readline from "readline";
-import { AppDataSource } from "../connection";
-import { UserSeeder } from "./UserSeeder";
-import { UserDataSeeder } from "./UserDataSeeder";
+import readline from 'readline';
+import { AppDataSource } from '../connection';
+import { UserSeeder } from './UserSeeder';
+import { UserDataSeeder } from './UserDataSeeder';
 
 async function runSeed() {
   try {
-    if (process.env.ENV !== "local") {
-      if (process.env.ENV !== "development") {
-        throw new Error(
-          "Seeding not allowed in environment other than local/development."
-        );
+    if (process.env.ENV !== 'local') {
+      if (process.env.ENV !== 'development') {
+        throw new Error('Seeding not allowed in environment other than local/development.');
       }
       // development env check
       const rl = readline.createInterface({
@@ -19,21 +17,21 @@ async function runSeed() {
 
       const answer = await new Promise<string>((resolve) => {
         rl.question(
-          "This is the development environment. Do you still want to proceed with seeding? (deletes all entries and recreates) (yes/no) ",
+          'This is the development environment. Do you still want to proceed with seeding? (deletes all entries and recreates) (yes/no) ',
           (ans) => {
             rl.close();
             resolve(ans);
-          }
+          },
         );
       });
 
-      if (answer.toLowerCase() !== "yes") {
-        throw new Error("Seeding aborted by the user.");
+      if (answer.toLowerCase() !== 'yes') {
+        throw new Error('Seeding aborted by the user.');
       }
     }
 
     await AppDataSource.initialize();
-    console.log("Data Source has been initialized!");
+    console.log('Data Source has been initialized!');
 
     // ask if all migrations should be run again
     const rl = readline.createInterface({
@@ -41,41 +39,38 @@ async function runSeed() {
       output: process.stdout,
     });
 
-    rl.question(
-      "Do you want to run all migrations again? This deletes all data. (y/n): ",
-      async (answer) => {
-        if (answer.toLowerCase() === "y") {
-          console.log("Running all migrations again...");
+    rl.question('Do you want to run all migrations again? This deletes all data. (y/n): ', async (answer) => {
+      if (answer.toLowerCase() === 'y') {
+        console.log('Running all migrations again...');
 
-          // Delete all tables and truncate migrations table
-          await AppDataSource.query("TRUNCATE migrations;");
-          await AppDataSource.query("DROP TABLE IF EXISTS user_data;");
-          await AppDataSource.query("DROP TABLE IF EXISTS users;");
+        // Delete all tables and truncate migrations table
+        await AppDataSource.query('TRUNCATE migrations;');
+        await AppDataSource.query('DROP TABLE IF EXISTS user_data;');
+        await AppDataSource.query('DROP TABLE IF EXISTS users;');
 
-          console.log("All tables deleted and migrations table truncated.");
+        console.log('All tables deleted and migrations table truncated.');
 
-          // Run migrations
-          await AppDataSource.runMigrations();
+        // Run migrations
+        await AppDataSource.runMigrations();
 
-          console.log("Migrations completed.");
-        } else {
-          console.log("Skipping migrations.");
-        }
-
-        // Start seeding
-        const userSeeder = new UserSeeder(AppDataSource);
-        await userSeeder.seed();
-        // Start seeding
-        const userDataSeeder = new UserDataSeeder(AppDataSource);
-        await userDataSeeder.seed();
-        console.log("Seeding completed successfully!");
-
-        await AppDataSource.destroy();
-        rl.close();
+        console.log('Migrations completed.');
+      } else {
+        console.log('Skipping migrations.');
       }
-    );
+
+      // Start seeding
+      const userSeeder = new UserSeeder(AppDataSource);
+      await userSeeder.seed();
+      // Start seeding
+      const userDataSeeder = new UserDataSeeder(AppDataSource);
+      await userDataSeeder.seed();
+      console.log('Seeding completed successfully!');
+
+      await AppDataSource.destroy();
+      rl.close();
+    });
   } catch (err) {
-    console.error("Error during seeding:", err);
+    console.error('Error during seeding:', err);
     process.exit(1);
   }
 }

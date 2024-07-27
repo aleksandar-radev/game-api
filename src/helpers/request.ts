@@ -1,7 +1,7 @@
-import { Request } from "express";
-import { pagination } from "./pagination";
-import * as sorting from "./sorting";
-import { User } from "../models/User";
+import { Request } from 'express';
+import { pagination } from './pagination';
+import * as sorting from './sorting';
+import { User } from '../models/User';
 
 export interface AuthRequest extends Request {
   user?: User;
@@ -17,10 +17,7 @@ export const getRequestOptions = (req: Request): Record<string, any> => {
   return { ...paginationOptions, ...sortOptions };
 };
 
-export const getFilteringOptions = (
-  req: Request,
-  parameters: string[]
-): Record<string, any> => {
+export const getFilteringOptions = (req: Request, parameters: string[]): Record<string, any> => {
   let options: Record<string, any> = {};
 
   parameters.forEach((param) => {
