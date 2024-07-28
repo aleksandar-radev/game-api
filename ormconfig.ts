@@ -2,9 +2,6 @@ import * as dotenv from 'dotenv';
 import { DataSourceOptions } from 'typeorm';
 dotenv.config();
 
-const isProd = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development';
-const fileExtension = isProd ? 'js' : 'ts';
-
 export const config: DataSourceOptions = {
   type: 'postgres',
   host: process.env.DB_HOST,
@@ -13,8 +10,8 @@ export const config: DataSourceOptions = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   schema: process.env.DB_SCHEMA,
-  entities: [`src/models/*.${fileExtension}`],
-  migrations: [`src/database/migrations/*.${fileExtension}`],
+  entities: [`src/models/*.{js,ts}`],
+  migrations: [`src/database/migrations/*.{js,ts}`],
   synchronize: false,
 };
 
@@ -26,7 +23,7 @@ export const testConfig: DataSourceOptions = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   schema: 'test',
-  entities: [`src/models/*.${fileExtension}`],
-  migrations: [`src/database/migrations/*.${fileExtension}`],
+  entities: [`src/models/*.{js,ts}`],
+  migrations: [`src/database/migrations/*.{js,ts}`],
   synchronize: true,
 };
