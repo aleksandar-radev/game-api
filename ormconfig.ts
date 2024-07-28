@@ -10,7 +10,7 @@ export const config: DataSourceOptions = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   schema: process.env.DB_SCHEMA,
-  entities: [`src/models/*.{js,ts}`],
+  entities: [__dirname + '/src/models/*.{js,ts}'],
   migrations: [`src/database/migrations/*.{js,ts}`],
   synchronize: false,
 };
@@ -23,7 +23,7 @@ export const testConfig: DataSourceOptions = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   schema: 'test',
-  entities: [`src/models/*.{js,ts}`],
+  entities: [__dirname + '/src/models/*.{js,ts}'],
   migrations: [`src/database/migrations/*.{js,ts}`],
   synchronize: true,
 };
