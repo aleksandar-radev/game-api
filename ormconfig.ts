@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 import { DataSourceOptions } from 'typeorm';
 dotenv.config();
 
-const isProd = process.env.NODE_ENV === 'production';
+const isProd = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development';
 const fileExtension = isProd ? 'js' : 'ts';
 
 export const config: DataSourceOptions = {
