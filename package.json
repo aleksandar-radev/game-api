@@ -2,7 +2,7 @@
   "name": "express-docker",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/app.js",
+  "main": "dist/src/server.js",
   "scripts": {
     "build": "sh -c '$INIT_CWD/scripts/update.sh build'",
     "seed": "sh -c '$INIT_CWD/scripts/update.sh seed'",
