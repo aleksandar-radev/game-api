@@ -1,4 +1,4 @@
-import express, { Application, Express } from 'express';
+import express, { Express } from 'express';
 import 'reflect-metadata';
 import logger from './config/logger';
 import multer from 'multer';
