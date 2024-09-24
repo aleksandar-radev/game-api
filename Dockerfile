@@ -39,8 +39,6 @@ RUN yarn workspaces focus --production
 # Create logs directory and set permissions
 RUN mkdir logs
 
-EXPOSE 3010
-
 # Start the application
 CMD ["yarn", "start"]
 
