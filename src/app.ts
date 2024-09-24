@@ -7,6 +7,7 @@ import { addRoutes } from './routes/routes';
 import dotenv from 'dotenv';
 import { Server } from 'http';
 import cors from 'cors';
+import statusMonitor from 'express-status-monitor';
 
 export async function createServer(): Promise<Server> {
   dotenv.config();
@@ -17,6 +18,7 @@ export async function createServer(): Promise<Server> {
     throw new Error('PORT is not defined');
   }
 
+  app.use(statusMonitor());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(multer().any());
