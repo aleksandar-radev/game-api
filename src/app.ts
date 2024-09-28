@@ -7,24 +7,17 @@ import { addRoutes } from './routes/routes';
 import dotenv from 'dotenv';
 import { Server } from 'http';
 import cors from 'cors';
-
 import helmet from 'helmet';
 
 export async function createServer(): Promise<Server> {
   dotenv.config();
   const app: Express = express();
   const PORT = process.env.NODE_ENV === 'test' ? 3001 : process.env.PORT || 3000;
-  const csurf = require('csurf');
 
   if (!PORT) {
     throw new Error('PORT is not defined');
   }
 
-  app.use(csurf());
-
-  app.use(function (req, res, next) {
-    res.cookie('mytoken', req.csrfToken());
-  });
   app.use(helmet());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
