@@ -14,7 +14,7 @@ export class CreateGamesTable1721000000000 implements MigrationInterface {
         "logo_url" character varying, 
         "big_logo_url" character varying, 
         "url" character varying, 
-        "uploaded_by" integer, 
+        "uploaded_by_id" integer, 
         "release_date" TIMESTAMP, 
         "rating" decimal(3,1), 
         "status" character varying NOT NULL DEFAULT 'active', 

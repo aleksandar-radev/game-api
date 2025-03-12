@@ -13,7 +13,7 @@ import crypt from '../helpers/crypt';
 import { get } from 'http';
 
 @Service()
-@Controller('/user-data')
+@Controller('/game-data')
 @UseBefore(AuthMiddleware)
 export class GameDataController {
   constructor(
