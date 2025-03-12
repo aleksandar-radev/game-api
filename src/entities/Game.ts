@@ -40,8 +40,8 @@ export class Game {
   @Column({ nullable: true })
   url?: string;
 
-  @Column({ name: 'publisher_id', nullable: true })
-  publisherId?: number;
+  @Column({ name: 'uploaded_by_id', nullable: true })
+  uploadedById?: number;
 
   @Column({ name: 'release_date', type: 'timestamp', nullable: true })
   releaseDate?: Date;
@@ -68,8 +68,8 @@ export class Game {
   deletedAt?: Date;
 
   @ManyToOne(() => User)
-  @JoinColumn({ name: 'publisher_id' })
-  publisher?: User;
+  @JoinColumn({ name: 'uploaded_by_id' })
+  uploadedBy?: User;
 
   @OneToMany(() => GameComment, (comment) => comment.game)
   comments?: GameComment[];

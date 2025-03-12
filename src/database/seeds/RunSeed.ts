@@ -45,7 +45,10 @@ async function runSeed() {
 
         // Delete all tables and truncate migrations table
         await AppDataSource.query(`TRUNCATE "${process.env.DB_SCHEMA}".migrations;`);
-        await AppDataSource.query(`DROP TABLE IF EXISTS "${process.env.DB_SCHEMA}".user_data;`);
+        await AppDataSource.query(`DROP TABLE IF EXISTS "${process.env.DB_SCHEMA}".game_comment_reactions;`);
+        await AppDataSource.query(`DROP TABLE IF EXISTS "${process.env.DB_SCHEMA}".game_comments;`);
+        await AppDataSource.query(`DROP TABLE IF EXISTS "${process.env.DB_SCHEMA}".game_data;`);
+        await AppDataSource.query(`DROP TABLE IF EXISTS "${process.env.DB_SCHEMA}".games;`);
         await AppDataSource.query(`DROP TABLE IF EXISTS "${process.env.DB_SCHEMA}".users;`);
 
         console.log('All tables deleted and migrations table truncated.');
