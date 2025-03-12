@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { AuthRequest } from '../helpers/request';
 import { Service, Inject } from 'typedi';
-import { Controller, Get, Post, Delete, Req, UseBefore, Body, HttpCode, Param } from 'routing-controllers';
+import { Controller, Get, Post, Delete, Req, UseBefore, Body, HttpCode, Param, QueryParam } from 'routing-controllers';
 import { AuthMiddleware } from '../middleware/AuthMiddleware';
 import { FeedbackRepository } from '../repositories/FeedbackRepository';
 import { Feedback } from '../entities/Feedback';
@@ -29,7 +29,7 @@ export class FeedbackController {
   @Get('/')
   @HttpCode(200)
   @UseBefore(AuthMiddleware)
-  async getAllFeedback(@Req() req: AuthRequest, @Param('status') status?: string) {
+  async getAllFeedback(@Req() req: AuthRequest, @QueryParam('status') status?: string) {
     // Check if user is admin
     if (req.user?.role !== 'admin') {
       throw new BadRequestError('Unauthorized to view feedback');

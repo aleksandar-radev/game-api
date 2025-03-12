@@ -6,7 +6,6 @@ export class CreateFeedbackDto {
   name?: string;
 
   @IsOptional()
-  @IsEmail()
   email?: string;
 
   @IsOptional()
