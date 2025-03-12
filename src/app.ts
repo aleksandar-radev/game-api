@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 import { Server } from 'http';
 import cors from 'cors';
 import helmet from 'helmet';
+import path from 'path';
 
 export async function createServer(): Promise<Server> {
   dotenv.config();
@@ -18,7 +19,11 @@ export async function createServer(): Promise<Server> {
     throw new Error('PORT is not defined');
   }
 
-  app.use(helmet());
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+    }),
+  );
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(multer().any());
@@ -31,6 +36,7 @@ export async function createServer(): Promise<Server> {
   );
 
   addRoutes(app); // adds all routes from ./routes
+  app.use('/static', express.static(path.join(__dirname, '../static')));
 
   // start server
   const server = app.listen(PORT, () => {
