@@ -1,6 +1,6 @@
 import { AuthService } from '../AuthService';
 import { UserRepository } from '../../repositories/UserRepository';
-import { User } from '../../models/User';
+import { User } from '../../entities/User';
 import bcrypt from 'bcryptjs';
 import { Response } from 'express';
 import { BadRequestError } from '../../helpers/error';

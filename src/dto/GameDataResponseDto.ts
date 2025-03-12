@@ -1,7 +1,7 @@
 import { Exclude, Type } from 'class-transformer';
 import { UserResponseDto } from './UserResponseDto';
 
-export class UserDataResponseDto {
+export class GameDataResponseDto {
   @Exclude()
   user?: UserResponseDto;
   @Exclude()

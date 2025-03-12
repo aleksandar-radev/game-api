@@ -1,14 +1,14 @@
 import { BaseService } from './BaseService';
 import { Inject, Service } from 'typedi';
-import { UserDataRepository } from '../repositories/UserDataRepository';
+import { GameDataRepository } from '../repositories/GameDataRepository';
 import { BadRequestError } from '../helpers/error';
-import { UserDataDto } from '../dto/UserDataDto';
+import { GameDataDto } from '../dto/GameDataDto';
 import { plainToInstance } from 'class-transformer';
-import { LeaderboardUserDataDto } from '../dto/LeaderboardUserDataDto';
+import { LeaderboardGameDataDto } from '../dto/LeaderboardGameDataDto';
 
 @Service()
-export class UserDataService extends BaseService {
-  constructor(@Inject() private userDataRepository: UserDataRepository) {
+export class GameDataService extends BaseService {
+  constructor(@Inject() private gameDataRepository: GameDataRepository) {
     super();
   }
 
@@ -27,10 +27,10 @@ export class UserDataService extends BaseService {
     //   throw new BadRequestError("Data JSON name is required");
     // }
   }
-  formatDataJson(decryptedData: any): UserDataDto {
+  formatDataJson(decryptedData: any): GameDataDto {
     const parsedData = decryptedData;
-    // Format the decrypted data and return a UserDataDto object
-    const formattedData: UserDataDto = {
+    // Format the decrypted data and return a GameDataDto object
+    const formattedData: GameDataDto = {
       highest_level: parsedData.highestLevel || 0,
       total_experience: parsedData.totalExperience || 0,
       total_gold: parsedData.totalGold || 0,
@@ -42,14 +42,14 @@ export class UserDataService extends BaseService {
   }
 
   async getLeaderboardData() {
-    const leaderboardData = await this.userDataRepository.find({
+    const leaderboardData = await this.gameDataRepository.find({
       order: { highest_level: 'DESC' },
       relations: ['user'],
       take: 100,
     });
 
     return leaderboardData.map((data) => {
-      const plainData = plainToInstance(LeaderboardUserDataDto, data, {
+      const plainData = plainToInstance(LeaderboardGameDataDto, data, {
         excludeExtraneousValues: true,
       });
       return plainData;

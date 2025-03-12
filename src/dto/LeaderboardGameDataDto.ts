@@ -2,7 +2,7 @@ import { Exclude, Expose, Type } from 'class-transformer';
 import { LeaderboardUserDto } from './LeaderboardUserDto';
 
 @Exclude()
-export class LeaderboardUserDataDto {
+export class LeaderboardGameDataDto {
   @Expose()
   highest_level!: number;
 

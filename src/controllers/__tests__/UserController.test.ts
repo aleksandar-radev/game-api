@@ -2,7 +2,7 @@ import request from 'supertest';
 import { AppDataSource } from '../../database/connection';
 import { UserRepository } from '../../repositories/UserRepository';
 import { AuthService } from '../../services/AuthService';
-import { User } from '../../models/User';
+import { User } from '../../entities/User';
 import { Container } from 'typedi';
 import { createServer } from '../../app';
 import { Server } from 'http';
@@ -52,17 +52,17 @@ describe('UserController', () => {
 
   describe('POST /api/user/register', () => {
     it('should register a new user', async () => {
-      const userData = {
+      const gameData = {
         username: 'testuser',
         email: 'test@example.com',
         password: 'password',
         confirmPassword: 'password',
       };
 
-      const response = await request(server).post('/api/user/register').send(userData).expect(201);
+      const response = await request(server).post('/api/user/register').send(gameData).expect(201);
 
-      expect(response.body.username).toBe(userData.username);
-      expect(response.body.email).toBe(userData.email);
+      expect(response.body.username).toBe(gameData.username);
+      expect(response.body.email).toBe(gameData.email);
     });
   });
 

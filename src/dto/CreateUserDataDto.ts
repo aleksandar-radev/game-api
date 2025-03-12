@@ -1,7 +1,7 @@
 import { IsIn, IsNumber, IsOptional, IsString } from 'class-validator';
-import { UserData } from '../models/UserData';
+import { GameData } from '../entities/GameData';
 
-export class CreateUserDataDto {
+export class CreateGameDataDto {
   @IsOptional()
   @IsNumber()
   highest_level?: number;
@@ -16,8 +16,8 @@ export class CreateUserDataDto {
 
   @IsOptional()
   @IsString()
-  @IsIn([UserData.PREMIUM_NO, UserData.PREMIUM_YES, UserData.PREMIUM_TEST])
-  premium: string = UserData.PREMIUM_NO;
+  @IsIn([GameData.PREMIUM_NO, GameData.PREMIUM_YES, GameData.PREMIUM_TEST])
+  premium: string = GameData.PREMIUM_NO;
 
   @IsOptional()
   data_json: any;

@@ -2,7 +2,7 @@ import { UserRepository } from './../repositories/UserRepository';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { Response } from 'express';
-import { User } from '../models/User';
+import { User } from '../entities/User';
 import { BadRequestError } from '../helpers/error';
 import { BaseService } from './BaseService';
 import { Inject, Service } from 'typedi';

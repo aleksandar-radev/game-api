@@ -1,7 +1,7 @@
 import readline from 'readline';
 import { AppDataSource } from '../connection';
 import { UserSeeder } from './UserSeeder';
-import { UserDataSeeder } from './UserDataSeeder';
+import { GameDataSeeder } from './GameDataSeeder';
 
 async function runSeed() {
   try {
@@ -62,8 +62,8 @@ async function runSeed() {
       const userSeeder = new UserSeeder(AppDataSource);
       await userSeeder.seed();
       // Start seeding
-      const userDataSeeder = new UserDataSeeder(AppDataSource);
-      await userDataSeeder.seed();
+      const gameDataSeeder = new GameDataSeeder(AppDataSource);
+      await gameDataSeeder.seed();
       console.log('Seeding completed successfully!');
 
       await AppDataSource.destroy();

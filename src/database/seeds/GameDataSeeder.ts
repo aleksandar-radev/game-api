@@ -1,30 +1,30 @@
 import { DataSource } from 'typeorm';
-import { User } from '../../models/User';
-import { UserData } from '../../models/UserData';
+import { User } from '../../entities/User';
+import { GameData } from '../../entities/GameData';
 
-export class UserDataSeeder {
+export class GameDataSeeder {
   constructor(public dataSource: DataSource) {}
   public async seed(): Promise<void> {
     console.log('Seeding user data');
 
     const userRepository = this.dataSource.getRepository(User);
-    const userDataRepository = this.dataSource.getRepository(UserData);
+    const gameDataRepository = this.dataSource.getRepository(GameData);
 
-    if ((await userDataRepository.find()).length > 0) {
+    if ((await gameDataRepository.find()).length > 0) {
       console.log('User data already seeded');
       return;
     }
 
-    const userData = [];
+    const gameData = [];
     const users = await userRepository.find();
 
     for (const user of users) {
-      userData.push({
+      gameData.push({
         user: user,
       });
     }
 
-    await userDataRepository.save(userData);
+    await gameDataRepository.save(gameData);
     console.log('Seeding user data complete --------- ');
   }
 }

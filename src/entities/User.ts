@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Index, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { UserData } from './UserData';
+import { GameData } from './GameData';
 
 @Entity('users')
 @Index('IDX_USER_USERNAME', ['username'], {
@@ -36,8 +36,8 @@ export class User {
   @UpdateDateColumn()
   last_active!: Date;
 
-  @OneToMany(() => UserData, (userData) => userData.user)
-  userData?: UserData[];
+  @OneToMany(() => GameData, (gameData) => gameData.user)
+  gameData?: GameData[];
 
   constructor(config: Partial<User>) {
     Object.assign(this, config);

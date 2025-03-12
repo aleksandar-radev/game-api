@@ -1,7 +1,7 @@
 import { Request } from 'express';
 import { pagination } from './pagination';
 import * as sorting from './sorting';
-import { User } from '../models/User';
+import { User } from '../entities/User';
 
 export interface AuthRequest extends Request {
   user?: User;

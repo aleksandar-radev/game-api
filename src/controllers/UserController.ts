@@ -9,7 +9,7 @@ import { UserRepository } from '../repositories/UserRepository';
 import { RegisterUserDto } from '../dto/RegisterUserDto';
 import { UserResponseDto } from '../dto/UserResponseDto';
 import { plainToInstance } from 'class-transformer';
-import { UserDataRepository } from '../repositories/UserDataRepository';
+import { GameDataRepository } from '../repositories/GameDataRepository';
 
 @Controller('/user')
 @Service()
@@ -17,7 +17,7 @@ export class UserController {
   constructor(
     @Inject() private authService: AuthService,
     @Inject() private userRepository: UserRepository,
-    @Inject() private userDataRepository: UserDataRepository,
+    @Inject() private gameDataRepository: GameDataRepository,
   ) {}
 
   @Post('/register')
@@ -29,10 +29,10 @@ export class UserController {
 
     const user = await this.authService.createUser(username, email, password);
 
-    const userData = this.userDataRepository.create({
+    const gameData = this.gameDataRepository.create({
       user: { id: user.id },
     });
-    await this.userDataRepository.save(userData);
+    await this.gameDataRepository.save(gameData);
 
     this.authService.generateToken(res, user);
     return user;

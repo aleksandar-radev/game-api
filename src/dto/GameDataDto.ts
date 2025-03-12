@@ -1,6 +1,6 @@
 import { IsJSON, IsNumber, IsOptional, IsString } from 'class-validator';
 
-export class UserDataDto {
+export class GameDataDto {
   @IsOptional()
   @IsNumber()
   highest_level!: number;

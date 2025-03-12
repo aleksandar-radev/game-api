@@ -3,7 +3,7 @@ import { useContainer, useExpressServer } from 'routing-controllers';
 import { UserController } from '../controllers/UserController';
 import Container from 'typedi';
 import { ErrorMiddleware } from '../middleware/ErrorMiddleware';
-import { UserDataController } from '../controllers/UserDataController';
+import { GameDataController } from '../controllers/GameDataController';
 
 export const addRoutes = (app: express.Express) => {
   app.get('/', (req: Request, res: Response) => {
@@ -13,7 +13,7 @@ export const addRoutes = (app: express.Express) => {
   useContainer(Container);
 
   useExpressServer(app, {
-    controllers: [UserController, UserDataController],
+    controllers: [UserController, GameDataController],
     middlewares: [ErrorMiddleware],
     routePrefix: '/api',
     defaultErrorHandler: false, // Disable default error handling

@@ -1,6 +1,6 @@
 import { IsOptional, IsString } from 'class-validator';
 
-export class UpdateUserDataRequestDto {
+export class UpdateGameDataRequestDto {
   @IsString()
   data_json?: any;
 }

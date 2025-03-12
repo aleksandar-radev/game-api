@@ -1,50 +1,50 @@
 import { Controller, Get, Post, Body, Patch, Param, UseBefore, Req, QueryParam } from 'routing-controllers';
 import { Inject, Service } from 'typedi';
-import { UserDataService } from '../services/UserDataService';
-import { CreateUserDataDto } from '../dto/CreateUserDataDto';
-import { UpdateUserDataRequestDto } from '../dto/UpdateUserDataDto';
-import { UserDataRepository } from '../repositories/UserDataRepository';
+import { GameDataService } from '../services/GameDataService';
+import { CreateGameDataDto } from '../dto/CreateGameDataDto';
+import { UpdateGameDataRequestDto } from '../dto/UpdateGameDataDto';
+import { GameDataRepository } from '../repositories/GameDataRepository';
 import { AuthMiddleware } from '../middleware/AuthMiddleware';
 import { AuthRequest } from '../helpers/request';
 import { UserRepository } from '../repositories/UserRepository';
 import { plainToInstance } from 'class-transformer';
-import { UserDataResponseDto } from '../dto/UserDataResponseDto';
+import { GameDataResponseDto } from '../dto/GameDataResponseDto';
 import crypt from '../helpers/crypt';
 import { get } from 'http';
 
 @Service()
 @Controller('/user-data')
 @UseBefore(AuthMiddleware)
-export class UserDataController {
+export class GameDataController {
   constructor(
-    @Inject() private userDataService: UserDataService,
-    @Inject() private userDataRepository: UserDataRepository,
+    @Inject() private gameDataService: GameDataService,
+    @Inject() private gameDataRepository: GameDataRepository,
     @Inject() private userRepository: UserRepository,
   ) {}
 
   @Post('/')
-  async create(@Req() req: AuthRequest, @Body() createUserDataDto: CreateUserDataDto) {
+  async create(@Req() req: AuthRequest, @Body() createGameDataDto: CreateGameDataDto) {
     if (!req.user?.id) {
       throw new Error('Unexpected error, user not logged in');
     }
     const userId = req.user.id;
-    const userData = this.userDataRepository.create({
-      ...createUserDataDto,
+    const gameData = this.gameDataRepository.create({
+      ...createGameDataDto,
       user: { id: userId },
     });
 
-    const userDataExists = await this.userDataRepository.getByUserIdAndPremium(userId, userData.premium);
+    const gameDataExists = await this.gameDataRepository.getByUserIdAndPremium(userId, gameData.premium);
 
-    if (userDataExists) {
+    if (gameDataExists) {
       throw new Error('User data already exists');
     }
 
-    return await this.userDataRepository.save(userData);
+    return await this.gameDataRepository.save(gameData);
   }
 
   @Get('/leaderboard')
   async leaderboard(@Req() req: AuthRequest) {
-    return this.userDataService.getLeaderboardData();
+    return this.gameDataService.getLeaderboardData();
   }
 
   @Get('/:userId')
@@ -58,22 +58,22 @@ export class UserDataController {
     }
     const loggedInUser = req.user;
 
-    const userData = await this.userDataRepository.findOne({
+    const gameData = await this.gameDataRepository.findOne({
       where: { user: { id: userId }, premium },
       relations: ['user'],
     });
 
-    if (!userData || (userData.user.id !== loggedInUser.id && loggedInUser?.role !== 'admin')) {
+    if (!gameData || (gameData.user.id !== loggedInUser.id && loggedInUser?.role !== 'admin')) {
       throw new Error('User data not found / Unauthorized');
     }
 
-    return plainToInstance(UserDataResponseDto, userData);
+    return plainToInstance(GameDataResponseDto, gameData);
   }
 
   @Get('/')
   async findAll(@Req() req: AuthRequest) {
     // const loggedInUser = req.user;
-    return await this.userDataRepository.find({
+    return await this.gameDataRepository.find({
       // where: { user: { id: loggedInUser.id } },
       relations: ['user'],
     });
@@ -83,7 +83,7 @@ export class UserDataController {
   async update(
     @Param('id') userId: number,
     @Req() req: AuthRequest,
-    @Body() updateUserDataDto: UpdateUserDataRequestDto,
+    @Body() updateGameDataDto: UpdateGameDataRequestDto,
   ) {
     if (!req.user?.id) {
       throw new Error('Unexpected error, user not logged in');
@@ -94,9 +94,9 @@ export class UserDataController {
       throw new Error('User data not found / Unauthorized');
     }
 
-    const decryptedData = crypt.decrypt(updateUserDataDto.data_json);
-    const formattedData = this.userDataService.formatDataJson(decryptedData);
-    // this.userDataService.validateDataJson(decryptedData);
-    return await this.userDataRepository.updateAndGet(userId, formattedData);
+    const decryptedData = crypt.decrypt(updateGameDataDto.data_json);
+    const formattedData = this.gameDataService.formatDataJson(decryptedData);
+    // this.gameDataService.validateDataJson(decryptedData);
+    return await this.gameDataRepository.updateAndGet(userId, formattedData);
   }
 }
