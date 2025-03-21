@@ -3,7 +3,7 @@ cd "$(dirname "$0")/.."
 
 # Function to display usage
 show_usage() {
-  echo "Usage: yarn <script_type> [<command>]"
+  echo "Usage: pnpm <script_type> [<command>]"
   echo "Script types: migration, seed, build"
   echo "Commands for migration: generate, create, run, revert, show"
   echo "Seed and build do not require additional commands"
@@ -33,19 +33,19 @@ case $SCRIPT_TYPE in
 migration)
   case $COMMAND in
   generate)
-    yarn typeorm migration:generate -d $CONNECTION_FILE ./src/database/migrations/$3
+    pnpm typeorm migration:generate -d $CONNECTION_FILE ./src/database/migrations/$3
     ;;
   create)
-    cd ./src/database/migrations && yarn typeorm migration:create $3
+    cd ./src/database/migrations && pnpm typeorm migration:create $3
     ;;
   run)
-    yarn typeorm migration:run -d $CONNECTION_FILE
+    pnpm typeorm migration:run -d $CONNECTION_FILE
     ;;
   revert)
-    yarn typeorm migration:revert -d $CONNECTION_FILE
+    pnpm typeorm migration:revert -d $CONNECTION_FILE
     ;;
   show)
-    yarn typeorm migration:show -d $CONNECTION_FILE
+    pnpm typeorm migration:show -d $CONNECTION_FILE
     ;;
   *)
     echo "Invalid command for migration. Use generate, create, run, revert, or show."
