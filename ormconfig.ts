@@ -11,7 +11,7 @@ export const config: DataSourceOptions = {
   database: process.env.DB_NAME,
   schema: process.env.DB_SCHEMA,
   entities: [__dirname + '/src/entities/*.{js,ts}'],
-  migrations: [`src/database/migrations/*.{js,ts}`],
+  migrations: [__dirname + '/src/database/migrations/*.{js,ts}'],
   synchronize: false,
 };
 
@@ -24,6 +24,6 @@ export const testConfig: DataSourceOptions = {
   database: process.env.DB_NAME,
   schema: 'test',
   entities: [__dirname + '/src/entities/*.{js,ts}'],
-  migrations: [`src/database/migrations/*.{js,ts}`],
+  migrations: [__dirname + 'src/database/migrations/*.{js,ts}'],
   synchronize: true,
 };
