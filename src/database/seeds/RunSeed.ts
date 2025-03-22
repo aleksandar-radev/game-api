@@ -48,6 +48,7 @@ async function runSeed() {
         await AppDataSource.query(`DROP TABLE IF EXISTS "${process.env.DB_SCHEMA}".game_comment_reactions;`);
         await AppDataSource.query(`DROP TABLE IF EXISTS "${process.env.DB_SCHEMA}".game_comments;`);
         await AppDataSource.query(`DROP TABLE IF EXISTS "${process.env.DB_SCHEMA}".game_data;`);
+        await AppDataSource.query(`DROP TABLE IF EXISTS "${process.env.DB_SCHEMA}".feedback;`);
         await AppDataSource.query(`DROP TABLE IF EXISTS "${process.env.DB_SCHEMA}".games;`);
         await AppDataSource.query(`DROP TABLE IF EXISTS "${process.env.DB_SCHEMA}".users;`);
 
