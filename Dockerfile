@@ -1,5 +1,4 @@
 # Stage 1: Build the application
-
 FROM node:22-alpine as builder
 
 WORKDIR /usr/src/app
@@ -27,6 +26,7 @@ WORKDIR /usr/src/app
 
 # Copy the build artifacts from the builder stage
 COPY --from=builder /usr/src/app/dist ./dist
+COPY --from=builder /usr/src/app/scripts ./scripts
 COPY ["package.json", "pnpm-lock.yaml", ".env", "./"]
 
 # Add bash
@@ -34,11 +34,11 @@ RUN apk add --no-cache bash
 
 # Install & run pnpm
 RUN npm install -g pnpm
-RUN pnpm build
+# Install only production dependencies
+RUN pnpm install --prod
 
 # Create logs directory and set permissions
-RUN mkdir logs
+RUN mkdir -p logs
 
 # Start the application
 CMD ["pnpm", "start"]
-
