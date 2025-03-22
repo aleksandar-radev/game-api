@@ -29,6 +29,9 @@ WORKDIR /usr/src/app
 COPY --from=builder /usr/src/app/dist ./dist
 COPY ["package.json", "pnpm-lock.yaml", ".env", "./"]
 
+# Add bash
+RUN apk add --no-cache bash
+
 # Install & run pnpm
 RUN npm install -g pnpm
 RUN pnpm build
