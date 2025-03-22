@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class CreateFeedbackTable1721000000000 implements MigrationInterface {
-  name = 'CreateFeedbackTable1721000000000';
+export class CreateFeedbackTable1742638982933 implements MigrationInterface {
+  name = 'CreateFeedbackTable1742638982933';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -20,6 +20,6 @@ export class CreateFeedbackTable1721000000000 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DROP TABLE "app1"."feedback"`);
+    await queryRunner.query('DROP TABLE "app1"."feedback"');
   }
 }

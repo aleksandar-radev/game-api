@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class CreateGameCommentsTable1721000000001 implements MigrationInterface {
-  name = 'CreateGameCommentsTable1721000000001';
+export class CreateGameCommentsTable1742654040821 implements MigrationInterface {
+  name = 'CreateGameCommentsTable1742654040821';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -18,8 +18,8 @@ export class CreateGameCommentsTable1721000000001 implements MigrationInterface 
       )`,
     );
 
-    await queryRunner.query(`CREATE INDEX "IDX_GAME_COMMENTS_GAME_ID" ON "app1"."game_comments" ("game_id") `);
-    await queryRunner.query(`CREATE INDEX "IDX_GAME_COMMENTS_USER_ID" ON "app1"."game_comments" ("user_id") `);
+    await queryRunner.query('CREATE INDEX "IDX_GAME_COMMENTS_GAME_ID" ON "app1"."game_comments" ("game_id") ');
+    await queryRunner.query('CREATE INDEX "IDX_GAME_COMMENTS_USER_ID" ON "app1"."game_comments" ("user_id") ');
 
     await queryRunner.query(
       `ALTER TABLE "app1"."game_comments" ADD CONSTRAINT "FK_GAME_COMMENTS_GAME_ID" 
@@ -33,10 +33,10 @@ export class CreateGameCommentsTable1721000000001 implements MigrationInterface 
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`ALTER TABLE "app1"."game_comments" DROP CONSTRAINT "FK_GAME_COMMENTS_USER_ID"`);
-    await queryRunner.query(`ALTER TABLE "app1"."game_comments" DROP CONSTRAINT "FK_GAME_COMMENTS_GAME_ID"`);
-    await queryRunner.query(`DROP INDEX "app1"."IDX_GAME_COMMENTS_USER_ID"`);
-    await queryRunner.query(`DROP INDEX "app1"."IDX_GAME_COMMENTS_GAME_ID"`);
-    await queryRunner.query(`DROP TABLE "app1"."game_comments"`);
+    await queryRunner.query('ALTER TABLE "app1"."game_comments" DROP CONSTRAINT "FK_GAME_COMMENTS_USER_ID"');
+    await queryRunner.query('ALTER TABLE "app1"."game_comments" DROP CONSTRAINT "FK_GAME_COMMENTS_GAME_ID"');
+    await queryRunner.query('DROP INDEX "app1"."IDX_GAME_COMMENTS_USER_ID"');
+    await queryRunner.query('DROP INDEX "app1"."IDX_GAME_COMMENTS_GAME_ID"');
+    await queryRunner.query('DROP TABLE "app1"."game_comments"');
   }
 }

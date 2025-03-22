@@ -2,7 +2,6 @@ import {
   Middleware,
   ExpressErrorMiddlewareInterface,
   BadRequestError as RoutingControllersBadRequestError,
-  HttpError,
 } from 'routing-controllers';
 import { Request, Response, NextFunction } from 'express';
 import logger from '../config/logger';
@@ -13,11 +12,11 @@ import { MulterError } from 'multer';
 @Middleware({ type: 'after' })
 @Service()
 export class ErrorMiddleware implements ExpressErrorMiddlewareInterface {
-  error(err: Error, req: Request, res: Response, next: NextFunction) {
+  error(err: Error, req: Request, res: Response, _next: NextFunction) {
     console.error('Error Middleware', err.message, err.stack);
 
     if (err instanceof AuthenticationError) {
-      return res.status(401).json({ message: err.message || "You're not authorized" });
+      return res.status(401).json({ message: err.message || '"You\'re not authorized"' });
     }
 
     if (err instanceof BadRequestError) {

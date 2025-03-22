@@ -13,13 +13,12 @@ export class GameDataService extends BaseService {
   }
 
   validateDataJson(dataJson: string) {
-    let json;
     if (!dataJson) {
       throw new BadRequestError('Data JSON is required');
     }
     try {
-      json = JSON.parse(dataJson);
-    } catch (e) {
+      JSON.parse(dataJson);
+    } catch (_e) {
       throw new BadRequestError('Data JSON is invalid');
     }
 

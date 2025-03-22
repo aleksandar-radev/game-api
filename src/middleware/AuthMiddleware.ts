@@ -1,5 +1,5 @@
 import { Middleware, ExpressMiddlewareInterface } from 'routing-controllers';
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { AuthenticationError } from '../helpers/error';
 import { AuthRequest } from '../helpers/request';

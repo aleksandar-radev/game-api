@@ -1,17 +1,17 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "commonjs",
+    "module": "NodeNext",
     "rootDir": "./",
     "outDir": "./dist",
     "esModuleInterop": true,
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "baseUrl": "./",
+    "baseUrl": "./"
   },
   "include": ["src/**/*", "ormconfig.ts"],
   "exclude": ["node_modules", "dist"]

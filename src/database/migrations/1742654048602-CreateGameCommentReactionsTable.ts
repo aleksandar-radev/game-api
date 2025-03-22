@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class CreateGameCommentReactionsTable1721000000002 implements MigrationInterface {
-  name = 'CreateGameCommentReactionsTable1721000000002';
+export class CreateGameCommentReactionsTable1742654048602 implements MigrationInterface {
+  name = 'CreateGameCommentReactionsTable1742654048602';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -18,13 +18,13 @@ export class CreateGameCommentReactionsTable1721000000002 implements MigrationIn
     );
 
     await queryRunner.query(
-      `CREATE INDEX "IDX_COMMENT_REACTIONS_COMMENT_ID" ON "app1"."game_comment_reactions" ("comment_id") `,
+      'CREATE INDEX "IDX_COMMENT_REACTIONS_COMMENT_ID" ON "app1"."game_comment_reactions" ("comment_id") ',
     );
     await queryRunner.query(
-      `CREATE INDEX "IDX_COMMENT_REACTIONS_USER_ID" ON "app1"."game_comment_reactions" ("user_id") `,
+      'CREATE INDEX "IDX_COMMENT_REACTIONS_USER_ID" ON "app1"."game_comment_reactions" ("user_id") ',
     );
     await queryRunner.query(
-      `CREATE INDEX "IDX_COMMENT_REACTIONS_TYPE" ON "app1"."game_comment_reactions" ("reaction_type") `,
+      'CREATE INDEX "IDX_COMMENT_REACTIONS_TYPE" ON "app1"."game_comment_reactions" ("reaction_type") ',
     );
 
     await queryRunner.query(
@@ -40,14 +40,14 @@ export class CreateGameCommentReactionsTable1721000000002 implements MigrationIn
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `ALTER TABLE "app1"."game_comment_reactions" DROP CONSTRAINT "FK_COMMENT_REACTIONS_USER_ID"`,
+      'ALTER TABLE "app1"."game_comment_reactions" DROP CONSTRAINT "FK_COMMENT_REACTIONS_USER_ID"',
     );
     await queryRunner.query(
-      `ALTER TABLE "app1"."game_comment_reactions" DROP CONSTRAINT "FK_COMMENT_REACTIONS_COMMENT_ID"`,
+      'ALTER TABLE "app1"."game_comment_reactions" DROP CONSTRAINT "FK_COMMENT_REACTIONS_COMMENT_ID"',
     );
-    await queryRunner.query(`DROP INDEX "app1"."IDX_COMMENT_REACTIONS_TYPE"`);
-    await queryRunner.query(`DROP INDEX "app1"."IDX_COMMENT_REACTIONS_USER_ID"`);
-    await queryRunner.query(`DROP INDEX "app1"."IDX_COMMENT_REACTIONS_COMMENT_ID"`);
-    await queryRunner.query(`DROP TABLE "app1"."game_comment_reactions"`);
+    await queryRunner.query('DROP INDEX "app1"."IDX_COMMENT_REACTIONS_TYPE"');
+    await queryRunner.query('DROP INDEX "app1"."IDX_COMMENT_REACTIONS_USER_ID"');
+    await queryRunner.query('DROP INDEX "app1"."IDX_COMMENT_REACTIONS_COMMENT_ID"');
+    await queryRunner.query('DROP TABLE "app1"."game_comment_reactions"');
   }
 }

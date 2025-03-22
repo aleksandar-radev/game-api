@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class CreateGamesTable1721000000000 implements MigrationInterface {
-  name = 'CreateGamesTable1721000000000';
+export class CreateGamesTable1742652781894 implements MigrationInterface {
+  name = 'CreateGamesTable1742652781894';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -27,11 +27,11 @@ export class CreateGamesTable1721000000000 implements MigrationInterface {
       )`,
     );
 
-    await queryRunner.query(`CREATE INDEX "IDX_GAMES_NAME" ON "app1"."games" ("name") `);
+    await queryRunner.query('CREATE INDEX "IDX_GAMES_NAME" ON "app1"."games" ("name") ');
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DROP INDEX "app1"."IDX_GAMES_NAME"`);
-    await queryRunner.query(`DROP TABLE "app1"."games"`);
+    await queryRunner.query('DROP INDEX "app1"."IDX_GAMES_NAME"');
+    await queryRunner.query('DROP TABLE "app1"."games"');
   }
 }

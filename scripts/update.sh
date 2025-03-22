@@ -36,7 +36,7 @@ migration)
     pnpm typeorm migration:generate -d $CONNECTION_FILE ./src/database/migrations/$3
     ;;
   create)
-    cd ./src/database/migrations && pnpm typeorm migration:create $3
+    pnpm typeorm migration:create ./src/database/migrations/$3
     ;;
   run)
     pnpm typeorm migration:run -d $CONNECTION_FILE
