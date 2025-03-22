@@ -23,7 +23,7 @@ source .env
 
 # Determine the connection file based on NODE_ENV
 if [ "$NODE_ENV" = "production" ] || [ "$NODE_ENV" = "development" ] || [ "$NODE_ENV" = "test" ]; then
-  CONNECTION_FILE="./dist/database/connection.js"
+  CONNECTION_FILE="./dist/database/connection.ts"
 else
   CONNECTION_FILE="./src/database/connection.ts"
 fi
