@@ -27,7 +27,7 @@ WORKDIR /usr/src/app
 # Copy the build artifacts from the builder stage
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/scripts ./scripts
-COPY --from=builder /usr/src/app/static ./static
+COPY --from=builder /usr/src/app/static ./dist/static
 COPY ["package.json", "pnpm-lock.yaml", ".env", "./"]
 
 # Add bash
