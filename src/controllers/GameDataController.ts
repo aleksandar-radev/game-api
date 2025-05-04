@@ -61,6 +61,7 @@ export class GameDataController {
     @Req() req: AuthRequest,
     @Param('userId') userId: number,
     @QueryParam('premium') premium: string = 'no',
+    @QueryParam('gameName') gameName: string = '',
   ) {
     if (!req.user?.id) {
       throw new Error('Unexpected error, user not logged in');
@@ -68,7 +69,7 @@ export class GameDataController {
     const loggedInUser = req.user;
 
     const gameData = await this.gameDataRepository.findOne({
-      where: { user: { id: userId }, premium },
+      where: { user: { id: userId }, premium, game: { name: gameName } },
       relations: ['user'],
     });
 
