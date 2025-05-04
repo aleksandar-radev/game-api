@@ -20,4 +20,7 @@ export class GameDataDto {
   @IsOptional()
   @IsJSON()
   data_json!: any;
+
+  @IsOptional()
+  game?: any;
 }

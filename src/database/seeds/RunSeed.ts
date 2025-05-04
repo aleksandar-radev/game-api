@@ -2,6 +2,7 @@ import readline from 'readline';
 import { AppDataSource } from '../connection';
 import { UserSeeder } from './UserSeeder';
 import { GameDataSeeder } from './GameDataSeeder';
+import { GameSeeder } from './GameSeeder';
 
 async function runSeed() {
   try {
@@ -39,7 +40,7 @@ async function runSeed() {
       output: process.stdout,
     });
 
-    rl.question('Do you want to run all migrations again? This deletes all data. (y/n): ', async (answer) => {
+    rl.question('Do you want to run all migrations again? This deletes all data. (y/N): ', async (answer) => {
       if (answer.toLowerCase() === 'y') {
         console.log('Running all migrations again...');
 
@@ -65,9 +66,15 @@ async function runSeed() {
       // Start seeding
       const userSeeder = new UserSeeder(AppDataSource);
       await userSeeder.seed();
-      // Start seeding
+
+      // Seed games
+      const gameSeeder = new GameSeeder(AppDataSource);
+      await gameSeeder.seed();
+
+      // Seed game data
       const gameDataSeeder = new GameDataSeeder(AppDataSource);
       await gameDataSeeder.seed();
+
       console.log('Seeding completed successfully!');
 
       await AppDataSource.destroy();

@@ -21,4 +21,7 @@ export class CreateGameDataDto {
 
   @IsOptional()
   data_json: any;
+
+  @IsString()
+  game_name?: string;
 }

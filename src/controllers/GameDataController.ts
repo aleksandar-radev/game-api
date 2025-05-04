@@ -10,7 +10,7 @@ import { UserRepository } from '../repositories/UserRepository';
 import { plainToInstance } from 'class-transformer';
 import { GameDataResponseDto } from '../dto/GameDataResponseDto';
 import crypt from '../helpers/crypt';
-import { get } from 'http';
+import type { GameRepository } from '../repositories/GameRepository';
 
 @Service()
 @Controller('/game-data')
@@ -20,6 +20,7 @@ export class GameDataController {
     @Inject() private gameDataService: GameDataService,
     @Inject() private gameDataRepository: GameDataRepository,
     @Inject() private userRepository: UserRepository,
+    @Inject() private gameRepository: GameRepository,
   ) {}
 
   @Post('/')
@@ -28,9 +29,17 @@ export class GameDataController {
       throw new Error('Unexpected error, user not logged in');
     }
     const userId = req.user.id;
+
+    // 1. Find the game by name
+    const game = await this.gameRepository.findOne({ where: { name: createGameDataDto.game_name } });
+    if (!game) {
+      throw new Error('Game not found');
+    }
+
     const gameData = this.gameDataRepository.create({
       ...createGameDataDto,
       user: { id: userId },
+      game: { id: game.id }, // Set the game relation
     });
 
     const gameDataExists = await this.gameDataRepository.getByUserIdAndPremium(userId, gameData.premium);
@@ -43,7 +52,7 @@ export class GameDataController {
   }
 
   @Get('/leaderboard')
-  async leaderboard(@Req() req: AuthRequest) {
+  async leaderboard(@Req() _req: AuthRequest) {
     return this.gameDataService.getLeaderboardData();
   }
 
@@ -71,7 +80,7 @@ export class GameDataController {
   }
 
   @Get('/')
-  async findAll(@Req() req: AuthRequest) {
+  async findAll(@Req() _req: AuthRequest) {
     // const loggedInUser = req.user;
     return await this.gameDataRepository.find({
       // where: { user: { id: loggedInUser.id } },
@@ -94,9 +103,18 @@ export class GameDataController {
       throw new Error('User data not found / Unauthorized');
     }
 
+    // 1. Find the game by name
+    const game = await this.gameRepository.findOne({ where: { name: updateGameDataDto.game_name } });
+    if (!game) {
+      throw new Error('Game not found');
+    }
+
     const decryptedData = crypt.decrypt(updateGameDataDto.data_json);
     const formattedData = this.gameDataService.formatDataJson(decryptedData);
-    // this.gameDataService.validateDataJson(decryptedData);
+
+    // Add the game relation
+    formattedData.game = game;
+
     return await this.gameDataRepository.updateAndGet(userId, formattedData);
   }
 }
