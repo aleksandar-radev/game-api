@@ -12,15 +12,15 @@ const filterOnly = (level: string) => {
   })();
 };
 
-const levels = {
-  error: 0,
-  warn: 1,
-  info: 2,
-  http: 3,
-  verbose: 4,
-  debug: 5,
-  silly: 6,
-};
+// const levels = {
+//   error: 0,
+//   warn: 1,
+//   info: 2,
+//   http: 3,
+//   verbose: 4,
+//   debug: 5,
+//   silly: 6,
+// };
 
 // Configure the log directory and log file name
 const logDirectory = 'logs';

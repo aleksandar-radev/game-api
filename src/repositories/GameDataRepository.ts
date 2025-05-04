@@ -10,8 +10,11 @@ export class GameDataRepository extends Repository<GameData> {
   }
 
   async updateAndGet(id: number, gameData: Partial<GameData>): Promise<GameData | null> {
-    await this.update({ user: { id }, premium: gameData.premium }, gameData);
-    return this.findOne({ where: { user: { id }, premium: gameData.premium } });
+    const entity = await this.findOne({ where: { user: { id }, premium: gameData.premium } });
+    if (!entity) return null;
+    Object.assign(entity, gameData);
+    await this.save(entity);
+    return entity;
   }
 
   async getByUserIdAndPremium(id: number, premium: string): Promise<GameData | null> {

@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Column, Index } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Column, Index, UpdateDateColumn } from 'typeorm';
 import { User } from './User';
 import { Game } from './Game';
 
@@ -51,10 +51,10 @@ export class GameData {
   @Column({ default: GameData.PREMIUM_NO })
   premium!: string;
 
-  @Column({ type: 'timestamp', default: () => 'now()' })
+  @Column({ type: 'timestamptz', default: () => 'now()' })
   created_at!: Date;
 
-  @Column({ type: 'timestamp', default: () => 'now()' })
+  @UpdateDateColumn({ type: 'timestamptz', default: () => 'now()' })
   updated_at!: Date;
 
   constructor(config: Partial<GameData>) {

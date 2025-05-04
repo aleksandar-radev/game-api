@@ -6,6 +6,5 @@ export class GameDataResponseDto {
   user?: UserResponseDto;
   @Exclude()
   created_at?: any;
-  @Exclude()
   updated_at?: any;
 }

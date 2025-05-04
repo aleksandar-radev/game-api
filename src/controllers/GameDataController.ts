@@ -10,7 +10,7 @@ import { UserRepository } from '../repositories/UserRepository';
 import { plainToInstance } from 'class-transformer';
 import { GameDataResponseDto } from '../dto/GameDataResponseDto';
 import crypt from '../helpers/crypt';
-import type { GameRepository } from '../repositories/GameRepository';
+import { GameRepository } from '../repositories/GameRepository';
 
 @Service()
 @Controller('/game-data')
