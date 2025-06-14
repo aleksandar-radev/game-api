@@ -1,6 +1,5 @@
-import { Response } from 'express';
 import { AuthRequest } from '../helpers/request';
-import { Service, Inject } from 'typedi';
+import { Service } from 'typedi';
 import {
   Controller,
   Get,
@@ -8,7 +7,6 @@ import {
   Put,
   Delete,
   Req,
-  Res,
   UseBefore,
   Body,
   HttpCode,
