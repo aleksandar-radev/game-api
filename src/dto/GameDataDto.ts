@@ -1,26 +1,19 @@
-import { IsJSON, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsJSON, IsOptional, IsString } from 'class-validator';
+import { LeaderboardStats } from '../types/LeaderboardStats';
 
 export class GameDataDto {
   @IsOptional()
-  @IsNumber()
-  highest_level!: number;
-
-  @IsOptional()
-  @IsNumber()
-  total_experience!: number;
-
-  @IsOptional()
-  @IsNumber()
-  total_gold!: number;
+  @IsJSON()
+    leaderboard_stats?: LeaderboardStats;
 
   @IsOptional()
   @IsString()
-  premium?: string;
+    premium?: string;
 
   @IsOptional()
   @IsJSON()
-  data_json!: any;
+    data_json!: any;
 
   @IsOptional()
-  game?: any;
+    game?: any;
 }

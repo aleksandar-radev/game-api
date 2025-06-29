@@ -4,7 +4,6 @@
  * ESLint configuration file.
  */
 
-import prettier from 'eslint-plugin-prettier';
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import typescriptParser from '@typescript-eslint/parser';
 
@@ -33,21 +32,9 @@ export default [
 
   {
     plugins: {
-      prettier: prettier,
       '@typescript-eslint': typescriptEslint,
     },
     rules: {
-      'prettier/prettier': [
-        'error',
-        {
-          tabWidth: 2,
-          singleQuote: true,
-          htmlWhitespaceSensitivity: 'ignore',
-          endOfLine: 'auto',
-          printWidth: 120,
-          singleAttributePerLine: false,
-        },
-      ],
       '@typescript-eslint/no-unused-expressions': [
         'error',
         {
@@ -55,9 +42,20 @@ export default [
           allowTernary: true,
         },
       ],
-      quotes: ['warn', 'single'],
+      quotes: ['warn', 'single', { avoidEscape: true }],
       'no-trailing-spaces': ['error', { skipBlankLines: false }],
-      indent: 'off',
+      indent: ['error', 2, { SwitchCase: 1 }],
+      'max-len': [
+        'error',
+        {
+          code: 120,
+          ignoreComments: true,
+          ignoreStrings: true,
+          ignoreTemplateLiterals: true,
+          ignoreUrls: true,
+        },
+      ],
+      'no-tabs': ['error'],
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
@@ -67,6 +65,9 @@ export default [
           caughtErrorsIgnorePattern: '^_',
         },
       ],
+      semi: ['error', 'always'],
+      'object-curly-spacing': ['error', 'always'],
+      'comma-dangle': ['error', 'always-multiline'],
     },
   },
 ];

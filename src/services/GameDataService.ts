@@ -29,10 +29,15 @@ export class GameDataService extends BaseService {
   formatDataJson(decryptedData: any): GameDataDto {
     const parsedData = decryptedData;
     // Format the decrypted data and return a GameDataDto object
+    const stats = parsedData.leaderboardStats || {};
     const formattedData: GameDataDto = {
-      highest_level: parsedData.highestLevel || 0,
-      total_experience: parsedData.totalExperience || 0,
-      total_gold: parsedData.totalGold || 0,
+      leaderboard_stats: {
+        highestScore: stats.highestScore ?? 0,
+        highestLevel: stats.highestLevel ?? 0,
+        highestStage: stats.highestStage ?? 0,
+        totalKills: stats.totalKills ?? 0,
+        totalGold: stats.totalGold ?? 0,
+      },
       premium: parsedData.premium || 'no',
       data_json: parsedData || {},
     };
@@ -41,11 +46,12 @@ export class GameDataService extends BaseService {
   }
 
   async getLeaderboardData() {
-    const leaderboardData = await this.gameDataRepository.find({
-      order: { highest_level: 'DESC' },
-      relations: ['user'],
-      take: 100,
-    });
+    const leaderboardData = await this.gameDataRepository
+      .createQueryBuilder('gd')
+      .leftJoinAndSelect('gd.user', 'user')
+      .orderBy("gd.leaderboard_stats->>'highestScore'", 'DESC')
+      .limit(100)
+      .getMany();
 
     return leaderboardData.map((data) => {
       const plainData = plainToInstance(LeaderboardGameDataDto, data, {

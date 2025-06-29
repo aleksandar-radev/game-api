@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Column, Index, UpdateDateColumn } from 'typeorm';
 import { User } from './User';
 import { Game } from './Game';
+import { LeaderboardStats } from '../types/LeaderboardStats';
 
 @Entity('game_data')
 @Index('IDX_GAME_DATA_USER_ID_PREMIUM', ['user.id', 'premium'], {
@@ -12,7 +13,7 @@ export class GameData {
   public static readonly PREMIUM_TEST = 'test';
 
   @PrimaryGeneratedColumn()
-  id?: number;
+    id?: number;
 
   @ManyToOne(() => User, {
     nullable: false,
@@ -23,7 +24,7 @@ export class GameData {
     name: 'user_id',
     foreignKeyConstraintName: 'FK_GAME_DATA_USER_ID',
   })
-  user!: User;
+    user!: User;
 
   @ManyToOne(() => Game, {
     nullable: true,
@@ -34,28 +35,22 @@ export class GameData {
     name: 'game_id',
     foreignKeyConstraintName: 'FK_GAME_DATA_GAME_ID',
   })
-  game?: Game;
+    game?: Game;
 
   @Column({ type: 'jsonb', nullable: true })
-  data_json?: Object;
+    data_json?: Object;
 
-  @Column({ nullable: true })
-  highest_level?: number;
-
-  @Column({ nullable: true })
-  total_experience?: number;
-
-  @Column({ nullable: true })
-  total_gold?: number;
+  @Column({ type: 'jsonb', nullable: true })
+    leaderboard_stats?: LeaderboardStats;
 
   @Column({ default: GameData.PREMIUM_NO })
-  premium!: string;
+    premium!: string;
 
   @Column({ type: 'timestamptz', default: () => 'now()' })
-  created_at!: Date;
+    created_at!: Date;
 
   @UpdateDateColumn({ type: 'timestamptz', default: () => 'now()' })
-  updated_at!: Date;
+    updated_at!: Date;
 
   constructor(config: Partial<GameData>) {
     Object.assign(this, config);
