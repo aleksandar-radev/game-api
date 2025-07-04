@@ -48,25 +48,35 @@ export class GameDataService extends BaseService {
     if (!gameName) {
       return [];
     }
+    // Select only leaderboard_stats and user fields, order numerically by highestLevel
     let query = this.gameDataRepository
       .createQueryBuilder('gd')
-      .leftJoinAndSelect('gd.user', 'user')
-      .leftJoinAndSelect('gd.game', 'game')
+      .select([
+        'gd.leaderboard_stats',
+        'user.id',
+        'user.username',
+      ])
+      .leftJoin('gd.user', 'user')
+      .leftJoin('gd.game', 'game')
       .where('game.name = :gameName', { gameName })
       .andWhere('(gd.leaderboard_stats->>\'highestLevel\')::int > 0')
-      .orderBy("gd.leaderboard_stats->>'highestLevel'", 'DESC')
+      .orderBy('(gd.leaderboard_stats->>\'highestLevel\')::int', 'DESC')
       .limit(100);
 
-    const leaderboardData = await query.getMany();
-
+    const leaderboardData = await query.getRawMany();
+    // Map to DTOs
     const leaderboardDataFormatted = leaderboardData.map((data) => {
+      const stats = data.gd_leaderboard_stats || {};
       const mapped = {
-        highestScore: data.leaderboard_stats?.highestScore ?? 0,
-        highestLevel: data.leaderboard_stats?.highestLevel ?? 0,
-        highestStage: data.leaderboard_stats?.highestStage ?? 0,
-        totalKills: data.leaderboard_stats?.totalKills ?? 0,
-        totalGold: data.leaderboard_stats?.totalGold ?? 0,
-        user: data.user,
+        highestScore: stats.highestScore ?? 0,
+        highestLevel: stats.highestLevel ?? 0,
+        highestStage: stats.highestStage ?? 0,
+        totalKills: stats.totalKills ?? 0,
+        totalGold: stats.totalGold ?? 0,
+        user: {
+          id: data.user_id,
+          username: data.user_username,
+        },
       };
       const plainData = plainToInstance(LeaderboardGameDataDto, mapped, {
         excludeExtraneousValues: true,
