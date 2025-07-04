@@ -22,7 +22,7 @@ COMMAND=$2
 source .env
 
 # Determine the connection file based on NODE_ENV
-if [ "$NODE_ENV" = "production" ] || [ "$NODE_ENV" = "development" ] || [ "$NODE_ENV" = "test" ]; then
+if [ "$NODE_ENV" != 'local' ]; then
   CONNECTION_FILE="./dist/src/database/connection.js"
 else
   CONNECTION_FILE="./src/database/connection.ts"
@@ -33,19 +33,39 @@ case $SCRIPT_TYPE in
 migration)
   case $COMMAND in
   generate)
-    pnpm typeorm migration:generate -d $CONNECTION_FILE ./src/database/migrations/$3
+    if [ "$NODE_ENV" != 'local' ]; then
+      npx typeorm migration:generate -d $CONNECTION_FILE ./src/database/migrations/$3
+    else
+      npx typeorm-ts-node-commonjs migration:generate -d $CONNECTION_FILE ./src/database/migrations/$3
+    fi
     ;;
   create)
-    pnpm typeorm migration:create ./src/database/migrations/$3
+    if [ "$NODE_ENV" != 'local' ]; then
+      npx typeorm migration:create ./src/database/migrations/$3
+    else
+      npx typeorm-ts-node-commonjs migration:create ./src/database/migrations/$3
+    fi
     ;;
   run)
-    pnpm typeorm migration:run -d $CONNECTION_FILE
+    if [ "$NODE_ENV" != 'local' ]; then
+      npx typeorm migration:run -d $CONNECTION_FILE
+    else
+      npx typeorm-ts-node-commonjs migration:run -d $CONNECTION_FILE
+    fi
     ;;
   revert)
-    pnpm typeorm migration:revert -d $CONNECTION_FILE
+    if [ "$NODE_ENV" != 'local' ]; then
+      npx typeorm migration:revert -d $CONNECTION_FILE
+    else
+      npx typeorm-ts-node-commonjs migration:revert -d $CONNECTION_FILE
+    fi
     ;;
   show)
-    pnpm typeorm migration:show -d $CONNECTION_FILE
+    if [ "$NODE_ENV" != 'local' ]; then
+      npx typeorm migration:show -d $CONNECTION_FILE
+    else
+      npx typeorm-ts-node-commonjs migration:show -d $CONNECTION_FILE
+    fi
     ;;
   *)
     echo "Invalid command for migration. Use generate, create, run, revert, or show."
