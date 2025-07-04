@@ -6,7 +6,6 @@ import { UpdateGameDataRequestDto } from '../dto/UpdateGameDataDto';
 import { GameDataRepository } from '../repositories/GameDataRepository';
 import { AuthMiddleware } from '../middleware/AuthMiddleware';
 import { AuthRequest } from '../helpers/request';
-import { UserRepository } from '../repositories/UserRepository';
 import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { GameDataResponseDto } from '../dto/GameDataResponseDto';
 import crypt from '../helpers/crypt';
@@ -14,16 +13,15 @@ import { GameRepository } from '../repositories/GameRepository';
 
 @Service()
 @Controller('/game-data')
-@UseBefore(AuthMiddleware)
 export class GameDataController {
   constructor(
     @Inject() private gameDataService: GameDataService,
     @Inject() private gameDataRepository: GameDataRepository,
-    @Inject() private userRepository: UserRepository,
     @Inject() private gameRepository: GameRepository,
   ) {}
 
   @Post('/')
+  @UseBefore(AuthMiddleware)
   async create(@Req() req: AuthRequest, @Body() createGameDataDto: CreateGameDataDto) {
     if (!req.user?.id) {
       throw new Error('Unexpected error, user not logged in');
@@ -59,6 +57,7 @@ export class GameDataController {
   }
 
   @Get('/:userId')
+  @UseBefore(AuthMiddleware)
   async findOne(
     @Req() req: AuthRequest,
     @Param('userId') userId: number,
@@ -83,6 +82,7 @@ export class GameDataController {
   }
 
   @Get('/')
+  @UseBefore(AuthMiddleware)
   async findAll(@Req() _req: AuthRequest) {
     // const loggedInUser = req.user;
     return await this.gameDataRepository.find({
@@ -92,6 +92,7 @@ export class GameDataController {
   }
 
   @Patch('/:id')
+  @UseBefore(AuthMiddleware)
   async update(
     @Param('id') userId: number,
     @Req() req: AuthRequest,
