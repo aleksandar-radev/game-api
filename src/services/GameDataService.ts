@@ -28,15 +28,14 @@ export class GameDataService extends BaseService {
   }
   formatDataJson(decryptedData: any): GameDataDto {
     const parsedData = decryptedData;
-    // Format the decrypted data and return a GameDataDto object
-    const stats = parsedData.leaderboardStats || {};
+
     const formattedData: GameDataDto = {
       leaderboard_stats: {
-        highestScore: stats.highestScore ?? 0,
-        highestLevel: stats.highestLevel ?? 0,
-        highestStage: stats.highestStage ?? 0,
-        totalKills: stats.totalKills ?? 0,
-        totalGold: stats.totalGold ?? 0,
+        highestScore: 0,
+        highestLevel: parsedData.hero.level ?? 0,
+        highestStage: 0,
+        totalKills: 0,
+        totalGold: 0,
       },
       premium: parsedData.premium || 'no',
       data_json: parsedData || {},
@@ -45,19 +44,35 @@ export class GameDataService extends BaseService {
     return formattedData;
   }
 
-  async getLeaderboardData() {
-    const leaderboardData = await this.gameDataRepository
+  async getLeaderboardData(gameName?: string) {
+    if (!gameName) {
+      return [];
+    }
+    let query = this.gameDataRepository
       .createQueryBuilder('gd')
       .leftJoinAndSelect('gd.user', 'user')
-      .orderBy("gd.leaderboard_stats->>'highestScore'", 'DESC')
-      .limit(100)
-      .getMany();
+      .leftJoinAndSelect('gd.game', 'game')
+      .where('game.name = :gameName', { gameName })
+      .andWhere('(gd.leaderboard_stats->>\'highestLevel\')::int > 0')
+      .orderBy("gd.leaderboard_stats->>'highestLevel'", 'DESC')
+      .limit(100);
 
-    return leaderboardData.map((data) => {
-      const plainData = plainToInstance(LeaderboardGameDataDto, data, {
+    const leaderboardData = await query.getMany();
+
+    const leaderboardDataFormatted = leaderboardData.map((data) => {
+      const mapped = {
+        highestScore: data.leaderboard_stats?.highestScore ?? 0,
+        highestLevel: data.leaderboard_stats?.highestLevel ?? 0,
+        highestStage: data.leaderboard_stats?.highestStage ?? 0,
+        totalKills: data.leaderboard_stats?.totalKills ?? 0,
+        totalGold: data.leaderboard_stats?.totalGold ?? 0,
+        user: data.user,
+      };
+      const plainData = plainToInstance(LeaderboardGameDataDto, mapped, {
         excludeExtraneousValues: true,
       });
       return plainData;
     });
+    return leaderboardDataFormatted;
   }
 }

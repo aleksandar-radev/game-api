@@ -7,7 +7,7 @@ import { GameDataRepository } from '../repositories/GameDataRepository';
 import { AuthMiddleware } from '../middleware/AuthMiddleware';
 import { AuthRequest } from '../helpers/request';
 import { UserRepository } from '../repositories/UserRepository';
-import { plainToInstance } from 'class-transformer';
+import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { GameDataResponseDto } from '../dto/GameDataResponseDto';
 import crypt from '../helpers/crypt';
 import { GameRepository } from '../repositories/GameRepository';
@@ -52,8 +52,10 @@ export class GameDataController {
   }
 
   @Get('/leaderboard')
-  async leaderboard(@Req() _req: AuthRequest) {
-    return this.gameDataService.getLeaderboardData();
+  async leaderboard(@Req() _req: AuthRequest, @QueryParam('gameName') gameName?: string) {
+    const data = await this.gameDataService.getLeaderboardData(gameName);
+
+    return instanceToPlain(data);
   }
 
   @Get('/:userId')
