@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM node:22-alpine as builder
+FROM node:24.0.2-alpine as builder
 
 WORKDIR /usr/src/app
 
@@ -20,7 +20,7 @@ RUN apk add --no-cache bash
 RUN pnpm build
 
 # Stage 2: Prepare the production image
-FROM node:22-alpine
+FROM node:24.0.2-alpine
 
 WORKDIR /usr/src/app
 
