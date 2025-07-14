@@ -27,7 +27,7 @@ export class AuthService extends BaseService {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      maxAge: 30 * 60 * 60 * 24 * 1000,
+      maxAge: 30 * 60 * 60 * 24 * 1000, // 30 days
     });
   }
 

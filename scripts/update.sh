@@ -27,7 +27,7 @@ fi
 
 #  source .env file
 if [ -f .env ]; then
-  export $(grep -v '^#' .env | xargs)
+  export NODE_ENV=$(grep '^NODE_ENV=' .env | cut -d '=' -f2)
 else
   echo ".env file not found. Please ensure it exists."
   exit 1
