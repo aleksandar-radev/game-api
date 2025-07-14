@@ -25,6 +25,14 @@ else
   CONNECTION_FILE="./src/database/connection.ts"
 fi
 
+#  source .env file
+if [ -f .env ]; then
+  export $(grep -v '^#' .env | xargs)
+else
+  echo ".env file not found. Please ensure it exists."
+  exit 1
+fi
+
 # Handle different script types
 case $SCRIPT_TYPE in
 migration)

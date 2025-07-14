@@ -4,14 +4,14 @@
   "description": "",
   "main": "dist/src/server.js",
   "scripts": {
-    "build": "dotenv-cli -e .env -- bash ./scripts/update.sh build",
-    "seed": "dotenv-cli -e .env -- bash ./scripts/update.sh seed",
+    "build": "bash ./scripts/update.sh build",
+    "seed": "bash ./scripts/update.sh seed",
     "start": "node dist/src/server.js",
     "dev": "nodemon --exec ts-node src/server.ts",
     "lint": "eslint . --ext .ts",
     "test": "jest --no-cache  --detectOpenHandles --runInBand --forceExit",
     "typeorm": "typeorm-ts-node-commonjs",
-    "migration": "dotenv-cli -e .env -- bash scripts/update.sh migration"
+    "migration": "bash scripts/update.sh migration"
   },
   "keywords": [],
   "author": "",
@@ -24,7 +24,6 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "dotenv-cli": "^8.0.0",
     "express": "^4.21.0",
     "express-async-handler": "^1.2.0",
     "helmet": "^7.1.0",
