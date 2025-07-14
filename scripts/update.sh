@@ -18,9 +18,6 @@ fi
 SCRIPT_TYPE=$1
 COMMAND=$2
 
-# Source the .env file
-NODE_ENV=$(npx dotenv -- bash -c 'echo $NODE_ENV')
-
 # Determine the connection file based on NODE_ENV
 if [ "$NODE_ENV" != 'local' ]; then
   CONNECTION_FILE="./dist/src/database/connection.js"
