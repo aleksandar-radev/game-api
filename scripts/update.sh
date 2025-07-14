@@ -19,7 +19,9 @@ SCRIPT_TYPE=$1
 COMMAND=$2
 
 # Source the .env file
+set -a
 source .env
+set +a
 
 # Determine the connection file based on NODE_ENV
 if [ "$NODE_ENV" != 'local' ]; then
