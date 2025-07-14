@@ -62,7 +62,7 @@ export class UserController {
   @Get('/session')
   @HttpCode(200)
   @UseBefore(AuthMiddleware)
-  async session(@Req() req: AuthRequest, @Res() res: Response) {
+  async session(@Req() req: AuthRequest, @Res() _res: Response) {
     return { user: plainToInstance(UserResponseDto, req.user) };
   }
 
@@ -77,7 +77,7 @@ export class UserController {
   @Get('/')
   @HttpCode(200)
   @UseBefore(AuthMiddleware)
-  async getUsers(@Req() req: AuthRequest) {
+  async getUsers(@Req() _req: AuthRequest) {
     return this.userRepository.find();
   }
 

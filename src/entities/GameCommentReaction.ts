@@ -22,15 +22,15 @@ export enum ReactionType {
 @Unique('UQ_user_comment_reaction', ['userId', 'commentId'])
 export class GameCommentReaction {
   @PrimaryGeneratedColumn()
-  id?: number;
+    id?: number;
 
   @Column({ name: 'comment_id' })
   @Index()
-  commentId!: number;
+    commentId!: number;
 
   @Column({ name: 'user_id' })
   @Index()
-  userId!: number;
+    userId!: number;
 
   @Column({
     name: 'reaction_type',
@@ -38,24 +38,24 @@ export class GameCommentReaction {
     enum: ReactionType,
   })
   @Index()
-  reactionType!: ReactionType;
+    reactionType!: ReactionType;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt!: Date;
+    createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt!: Date;
+    updatedAt!: Date;
 
   @DeleteDateColumn({ name: 'deleted_at' })
-  deletedAt!: Date;
+    deletedAt!: Date;
 
   @ManyToOne(() => GameComment, (comment) => comment.reactions, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'comment_id' })
-  comment!: GameComment;
+    comment!: GameComment;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
-  user!: User;
+    user!: User;
 
   constructor(config: Partial<GameCommentReaction>) {
     Object.assign(this, config);

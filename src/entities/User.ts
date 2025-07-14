@@ -13,31 +13,31 @@ export class User {
   public static readonly ROLE_USER = 'user';
   public static readonly ROLE_TESTER = 'tester';
   @PrimaryGeneratedColumn()
-  id?: number;
+    id?: number;
 
   @Column({ nullable: true })
-  username?: string;
+    username?: string;
 
   @Column()
-  password!: string;
+    password!: string;
 
   @Column()
-  email!: string;
+    email!: string;
 
   @Column({ default: User.ROLE_USER })
-  role!: string;
+    role!: string;
 
   @CreateDateColumn()
-  created_at!: Date;
+    created_at!: Date;
 
   @UpdateDateColumn()
-  updated_at!: Date;
+    updated_at!: Date;
 
   @UpdateDateColumn()
-  last_active!: Date;
+    last_active!: Date;
 
   @OneToMany(() => GameData, (gameData) => gameData.user)
-  gameData?: GameData[];
+    gameData?: GameData[];
 
   constructor(config: Partial<User>) {
     Object.assign(this, config);

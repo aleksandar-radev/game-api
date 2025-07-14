@@ -16,63 +16,63 @@ import { GameComment } from './GameComment';
 @Entity('games', { schema: 'app1' })
 export class Game {
   @PrimaryGeneratedColumn()
-  id?: number;
+    id?: number;
 
   @Column()
   @Index('IDX_GAMES_NAME')
-  name!: string;
+    name!: string;
 
   @Column()
-  title!: string;
+    title!: string;
 
   @Column()
-  type!: string;
+    type!: string;
 
   @Column({ type: 'text', nullable: true })
-  description?: string;
+    description?: string;
 
   @Column({ name: 'logo_url', nullable: true })
-  logoUrl?: string;
+    logoUrl?: string;
 
   @Column({ name: 'big_logo_url', nullable: true })
-  bigLogoUrl?: string;
+    bigLogoUrl?: string;
 
   @Column({ nullable: true })
-  url?: string;
+    url?: string;
 
   @Column({ name: 'uploaded_by_id', nullable: true })
-  uploadedById?: number;
+    uploadedById?: number;
 
   @Column({ name: 'release_date', type: 'timestamp', nullable: true })
-  releaseDate?: Date;
+    releaseDate?: Date;
 
   @Column({ type: 'decimal', precision: 3, scale: 1, nullable: true })
-  rating?: number;
+    rating?: number;
 
   @Column({ default: 'active' })
-  status!: string;
+    status!: string;
 
   @Column({ nullable: true })
-  version?: string;
+    version?: string;
 
   @Column({ name: 'is_featured', default: false })
-  isFeatured!: boolean;
+    isFeatured!: boolean;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt!: Date;
+    createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt!: Date;
+    updatedAt!: Date;
 
   @DeleteDateColumn({ name: 'deleted_at' })
-  deletedAt?: Date;
+    deletedAt?: Date;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'uploaded_by_id' })
-  uploadedBy?: User;
+    uploadedBy?: User;
 
   @OneToMany(() => GameComment, (comment) => comment.game)
-  comments?: GameComment[];
+    comments?: GameComment[];
 
   constructor(config: Partial<Game>) {
     Object.assign(this, config);

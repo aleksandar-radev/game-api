@@ -16,37 +16,37 @@ import { GameCommentReaction } from './GameCommentReaction';
 @Entity('game_comments', { schema: 'app1' })
 export class GameComment {
   @PrimaryGeneratedColumn()
-  id?: number;
+    id?: number;
 
   @Column({ name: 'game_id' })
-  gameId!: number;
+    gameId!: number;
 
   @Column({ name: 'user_id' })
-  userId!: number;
+    userId!: number;
 
   @Column()
-  content!: string;
+    content!: string;
 
   @Column({ default: 'active' })
-  status!: string;
+    status!: string;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt!: Date;
+    createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt!: Date;
+    updatedAt!: Date;
 
   @DeleteDateColumn({ name: 'deleted_at' })
-  deletedAt!: Date;
+    deletedAt!: Date;
 
   @ManyToOne(() => Game, (game: Game) => game.comments, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'game_id' })
-  game!: Game;
+    game!: Game;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
-  user!: User;
+    user!: User;
 
   @OneToMany(() => GameCommentReaction, (reaction) => reaction.comment)
-  reactions?: GameCommentReaction[];
+    reactions?: GameCommentReaction[];
 }

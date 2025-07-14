@@ -3,8 +3,8 @@ import { UserResponseDto } from './UserResponseDto';
 
 export class GameDataResponseDto {
   @Exclude()
-  user?: UserResponseDto;
+    user?: UserResponseDto;
   @Exclude()
-  created_at?: any;
+    created_at?: any;
   updated_at?: any;
 }

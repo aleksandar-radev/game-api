@@ -3,28 +3,28 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 @Entity('feedback', { schema: 'app1' })
 export class Feedback {
   @PrimaryGeneratedColumn()
-  id?: number;
+    id?: number;
 
   @Column({ nullable: true })
-  name?: string;
+    name?: string;
 
   @Column({ nullable: true })
-  email?: string;
+    email?: string;
 
   @Column({ type: 'text', nullable: true })
-  message?: string;
+    message?: string;
 
   @Column({ default: 'pending' })
-  status!: string;
+    status!: string;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt!: Date;
+    createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt!: Date;
+    updatedAt!: Date;
 
   @DeleteDateColumn({ name: 'deleted_at' })
-  deletedAt?: Date;
+    deletedAt?: Date;
 
   constructor(config: Partial<Feedback>) {
     Object.assign(this, config);

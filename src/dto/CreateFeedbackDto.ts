@@ -3,12 +3,12 @@ import { IsOptional, IsString } from 'class-validator';
 export class CreateFeedbackDto {
   @IsOptional()
   @IsString()
-  name?: string;
+    name?: string;
 
   @IsOptional()
-  email?: string;
+    email?: string;
 
   @IsOptional()
   @IsString()
-  message?: string;
+    message?: string;
 }

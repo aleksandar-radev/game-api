@@ -1,10 +1,8 @@
-import { Response } from 'express';
 import { AuthRequest } from '../helpers/request';
 import { Service, Inject } from 'typedi';
 import { Controller, Get, Post, Delete, Req, UseBefore, Body, HttpCode, Param, QueryParam } from 'routing-controllers';
 import { AuthMiddleware } from '../middleware/AuthMiddleware';
 import { FeedbackRepository } from '../repositories/FeedbackRepository';
-import { Feedback } from '../entities/Feedback';
 import { CreateFeedbackDto } from '../dto/CreateFeedbackDto';
 import { BadRequestError } from '../helpers/error';
 

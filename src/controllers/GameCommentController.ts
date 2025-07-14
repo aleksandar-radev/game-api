@@ -1,7 +1,6 @@
-import { Response } from 'express';
 import { AuthRequest } from '../helpers/request';
-import { Service, Inject } from 'typedi';
-import { Controller, Get, Post, Put, Delete, Req, Res, UseBefore, Body, HttpCode, Param } from 'routing-controllers';
+import { Service } from 'typedi';
+import { Controller, Get, Post, Put, Delete, Req, UseBefore, Body, HttpCode, Param } from 'routing-controllers';
 import { AuthMiddleware } from '../middleware/AuthMiddleware';
 import { Repository } from 'typeorm';
 import { AppDataSource } from '../database/connection';
