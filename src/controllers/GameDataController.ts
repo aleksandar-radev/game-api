@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, UseBefore, Req, QueryParam } from 'routing-controllers';
+import { Controller, Get, Post, Body, Patch, Param, UseBefore, Req, QueryParam, NotFoundError } from 'routing-controllers';
 import { Inject, Service } from 'typedi';
 import { GameDataService } from '../services/GameDataService';
 import { CreateGameDataDto } from '../dto/CreateGameDataDto';
@@ -75,7 +75,7 @@ export class GameDataController {
     });
 
     if (!gameData || (gameData.user.id !== loggedInUser.id && loggedInUser?.role !== 'admin')) {
-      throw new Error('User data not found / Unauthorized');
+      throw new NotFoundError('User data not found / Unauthorized');
     }
 
     return plainToInstance(GameDataResponseDto, gameData);
@@ -111,6 +111,20 @@ export class GameDataController {
     const game = await this.gameRepository.findOne({ where: { name: updateGameDataDto.game_name } });
     if (!game) {
       throw new Error('Game not found');
+    }
+
+    // 2. Check if the game data record exists
+    let gameData = await this.gameDataRepository.findOne({
+      where: { user: { id: userId }, game: { id: game.id }, premium: 'no' },
+    });
+
+    // 3. If not, create an empty record
+    if (!gameData) {
+      gameData = await this.gameDataRepository.save(
+        this.gameDataRepository.create({
+          user: { id: userId },
+        }),
+      );
     }
 
     const decryptedData = crypt.decrypt(updateGameDataDto.data_json);

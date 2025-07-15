@@ -2,6 +2,7 @@ import {
   Middleware,
   ExpressErrorMiddlewareInterface,
   BadRequestError as RoutingControllersBadRequestError,
+  NotFoundError,
 } from 'routing-controllers';
 import { Request, Response, NextFunction } from 'express';
 import logger from '../config/logger';
@@ -14,6 +15,10 @@ import { MulterError } from 'multer';
 export class ErrorMiddleware implements ExpressErrorMiddlewareInterface {
   error(err: Error, req: Request, res: Response, _next: NextFunction) {
     console.error('Error Middleware', err.message, err.stack);
+
+    if (err instanceof NotFoundError) {
+      return res.status(404).json({ message: err.message || 'Not Found' });
+    }
 
     if (err instanceof AuthenticationError) {
       return res.status(401).json({ message: err.message || '"You\'re not authorized"' });
