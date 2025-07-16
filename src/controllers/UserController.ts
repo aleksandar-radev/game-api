@@ -29,11 +29,6 @@ export class UserController {
 
     const user = await this.authService.createUser(username, email, password);
 
-    const gameData = this.gameDataRepository.create({
-      user: { id: user.id },
-    });
-    await this.gameDataRepository.save(gameData);
-
     this.authService.generateToken(res, user);
     return user;
   }

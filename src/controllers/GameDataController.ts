@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, UseBefore, Req, QueryParam, NotFoundError } from 'routing-controllers';
+import { Controller, Get, Body, Patch, Param, UseBefore, Req, QueryParam, NotFoundError } from 'routing-controllers';
 import { Inject, Service } from 'typedi';
 import { GameDataService } from '../services/GameDataService';
-import { CreateGameDataDto } from '../dto/CreateGameDataDto';
 import { UpdateGameDataRequestDto } from '../dto/UpdateGameDataDto';
 import { GameDataRepository } from '../repositories/GameDataRepository';
 import { AuthMiddleware } from '../middleware/AuthMiddleware';
@@ -19,35 +18,6 @@ export class GameDataController {
     @Inject() private gameDataRepository: GameDataRepository,
     @Inject() private gameRepository: GameRepository,
   ) {}
-
-  @Post('/')
-  @UseBefore(AuthMiddleware)
-  async create(@Req() req: AuthRequest, @Body() createGameDataDto: CreateGameDataDto) {
-    if (!req.user?.id) {
-      throw new Error('Unexpected error, user not logged in');
-    }
-    const userId = req.user.id;
-
-    // 1. Find the game by name
-    const game = await this.gameRepository.findOne({ where: { name: createGameDataDto.game_name } });
-    if (!game) {
-      throw new Error('Game not found');
-    }
-
-    const gameData = this.gameDataRepository.create({
-      ...createGameDataDto,
-      user: { id: userId },
-      game: { id: game.id }, // Set the game relation
-    });
-
-    const gameDataExists = await this.gameDataRepository.getByUserIdAndPremium(userId, gameData.premium);
-
-    if (gameDataExists) {
-      throw new Error('User data already exists');
-    }
-
-    return await this.gameDataRepository.save(gameData);
-  }
 
   @Get('/leaderboard')
   async leaderboard(@Req() _req: AuthRequest, @QueryParam('gameName') gameName?: string) {
