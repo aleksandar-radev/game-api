@@ -1,0 +1,15 @@
+name: Deploy to Development
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Deploy to Development Server
+        run: |
+          cd ~/workspace/env
+          git pull
+          ./app1/update.sh dev
