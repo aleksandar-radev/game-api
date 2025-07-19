@@ -8,6 +8,7 @@ import { GameController } from '../controllers/GameController';
 import { GameCommentController } from '../controllers/GameCommentController';
 import { GameCommentReactionController } from '../controllers/GameCommentReactionController';
 import { FeedbackController } from '../controllers/FeedbackController';
+import { TimeController } from '../controllers/TimeController';
 
 export const addRoutes = (app: express.Express) => {
   app.get('/', (req: Request, res: Response) => {
@@ -24,6 +25,7 @@ export const addRoutes = (app: express.Express) => {
       GameCommentController,
       GameCommentReactionController,
       FeedbackController,
+      TimeController,
     ],
     middlewares: [ErrorMiddleware],
     routePrefix: '/api',
