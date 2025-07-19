@@ -12,4 +12,7 @@ jobs:
         run: |
           cd ~/workspace/env
           git pull
-          ./app1/update.sh dev
+          cat <<EOF | ./app1/update.sh dev
+          no
+          yes
+          EOF
