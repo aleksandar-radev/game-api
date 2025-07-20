@@ -36,8 +36,23 @@ export class GameDataService extends BaseService {
       totalKills: 0,
       totalGold: 0,
     };
+    function isVersionGreaterOrEqual(v1: string, v2: string): boolean {
+      const a = v1.split('.').map(Number);
+      const b = v2.split('.').map(Number);
+      for (let i = 0; i < Math.max(a.length, b.length); i++) {
+        const numA = a[i] ?? 0;
+        const numB = b[i] ?? 0;
+        if (numA > numB) return true;
+        if (numA < numB) return false;
+      }
+      return true;
+    }
 
-    if (!parsedData.options?.resetRequired) {
+    if (
+      !parsedData.options?.resetRequired &&
+      parsedData.options?.version &&
+      isVersionGreaterOrEqual(parsedData.options.version, '0.5.7')
+    ) {
       leaderboard_stats = {
         highestScore: 0,
         highestLevel: parsedData.hero.level ?? 0,
