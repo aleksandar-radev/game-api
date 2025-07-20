@@ -48,7 +48,10 @@ export class GameDataController {
       throw new NotFoundError('User data not found / Unauthorized');
     }
 
-    return plainToInstance(GameDataResponseDto, gameData);
+    const plainData  = plainToInstance(GameDataResponseDto, gameData);
+    plainData.data_json = crypt.encrypt(plainData.data_json);
+
+    return plainData;
   }
 
   @Get('/')

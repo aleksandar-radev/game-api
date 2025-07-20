@@ -7,4 +7,5 @@ export class GameDataResponseDto {
   @Exclude()
     created_at?: any;
   updated_at?: any;
+  data_json?: any;
 }
