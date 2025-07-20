@@ -29,14 +29,26 @@ export class GameDataService extends BaseService {
   formatDataJson(decryptedData: any): GameDataDto {
     const parsedData = decryptedData;
 
-    const formattedData: GameDataDto = {
-      leaderboard_stats: {
+    let leaderboard_stats = {
+      highestScore: 0,
+      highestLevel: 0,
+      highestStage: 0,
+      totalKills: 0,
+      totalGold: 0,
+    };
+
+    if (!parsedData.options?.resetRequired) {
+      leaderboard_stats = {
         highestScore: 0,
         highestLevel: parsedData.hero.level ?? 0,
         highestStage: 0,
         totalKills: 0,
         totalGold: 0,
-      },
+      };
+    }
+
+    const formattedData: GameDataDto = {
+      leaderboard_stats,
       premium: parsedData.premium || 'no',
       data_json: parsedData || {},
     };
