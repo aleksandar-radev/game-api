@@ -106,6 +106,14 @@ export class GameDataController {
     // Add the game relation
     formattedData.game = game;
 
-    return await this.gameDataRepository.updateAndGet(userId, formattedData);
+    const updatedData = await this.gameDataRepository.updateAndGet(userId, formattedData);
+
+    if (!updatedData || !updatedData.data_json) {
+      throw new NotFoundError('Game data not found for the user');
+    }
+    // Encrypt the data_json before returning
+    updatedData.data_json = crypt.encrypt(updatedData.data_json);
+
+    return updatedData;
   }
 }
