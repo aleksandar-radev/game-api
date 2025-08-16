@@ -119,6 +119,30 @@ export class GameController {
     return await this.gameRepository.findOne({ where: { id } });
   }
 
+  @Put('/:name/version')
+  @HttpCode(200)
+  @UseBefore(AuthMiddleware)
+  async updateGameVersion(@Param('name') name: string, @Body() body: any, @Req() req: AuthRequest) {
+    const newVersion = body?.version;
+    if (!newVersion || typeof newVersion !== 'string') {
+      throw new BadRequestError('version is required');
+    }
+
+    // Only admin can update the version
+    if (req.user?.role !== 'admin') {
+      throw new BadRequestError('Unauthorized to update game version');
+    }
+
+    // Find game by name instead of id
+    const game = await this.gameRepository.findOne({ where: { name } });
+    if (!game) {
+      throw new BadRequestError('Game not found');
+    }
+
+    await this.gameRepository.update({ id: game.id }, { version: newVersion });
+    return await this.gameRepository.findOne({ where: { id: game.id } });
+  }
+
   @Delete('/:id')
   @HttpCode(200)
   @UseBefore(AuthMiddleware)

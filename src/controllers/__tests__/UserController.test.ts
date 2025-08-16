@@ -88,7 +88,7 @@ describe('UserController', () => {
 
   describe('POST /api/user/logout', () => {
     it('should logout a user', async () => {
-      const { user, jwtToken } = await createAndLoginUserAndReturnUserAndToken();
+      const { user: _user, jwtToken } = await createAndLoginUserAndReturnUserAndToken();
 
       const logoutResponse = await request(server).post('/api/user/logout').set('Cookie', jwtToken).expect(200);
 
@@ -111,7 +111,7 @@ describe('UserController', () => {
       await userRepository.save(user1);
       await userRepository.save(user2);
 
-      const { user, jwtToken } = await createAndLoginUserAndReturnUserAndToken();
+      const { user: _user, jwtToken } = await createAndLoginUserAndReturnUserAndToken();
 
       const response = await request(server).get('/api/user').set('Cookie', jwtToken).expect(200);
 
