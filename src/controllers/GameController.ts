@@ -1,5 +1,6 @@
 import { AuthRequest } from '../helpers/request';
 import { Service } from 'typedi';
+import { plainToInstance } from 'class-transformer';
 import {
   Controller,
   Get,
@@ -18,6 +19,7 @@ import { Repository } from 'typeorm';
 import { AppDataSource } from '../database/connection';
 import { Game } from '../entities/Game';
 import { BadRequestError } from '../helpers/error';
+import { UserNameDto } from '../dto/UserNameDto';
 
 @Controller('/games')
 @Service()
@@ -63,16 +65,43 @@ export class GameController {
     });
   }
 
-  @Get('/:id')
+  @Get('/:idOrName')
   @HttpCode(200)
-  async getGame(@Param('id') id: number) {
-    const game = await this.gameRepository.findOne({
-      where: { id },
-      relations: ['uploadedBy', 'comments', 'comments.user'],
-    });
+  async getGame(@Param('idOrName') idOrName: string) {
+    // Support fetching by numeric id or by game name
+    let game;
+
+    // If the param is an integer string, treat it as an id
+    if (/^\d+$/.test(idOrName)) {
+      const id = Number(idOrName);
+      game = await this.gameRepository.findOne({
+        where: { id },
+        relations: ['uploadedBy', 'comments', 'comments.user'],
+      });
+    } else {
+      // Otherwise, look up by name
+      game = await this.gameRepository.findOne({
+        where: { name: idOrName },
+        relations: ['uploadedBy', 'comments', 'comments.user'],
+      });
+    }
 
     if (!game) {
       throw new BadRequestError('Game not found');
+    }
+
+    // Sanitize nested user objects using DTO so password is excluded
+    if (game.uploadedBy) {
+      game.uploadedBy = plainToInstance(UserNameDto, game.uploadedBy) as any;
+    }
+
+    if (game.comments && Array.isArray(game.comments)) {
+      game.comments = game.comments.map((c) => {
+        if (c.user) {
+          c.user = plainToInstance(UserNameDto, c.user) as any;
+        }
+        return c;
+      });
     }
 
     return game;
