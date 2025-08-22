@@ -35,6 +35,7 @@ export class AuthService extends BaseService {
     res.cookie('jwt', '', {
       secure: true,
       httpOnly: true,
+      sameSite: 'none',
       expires: new Date(0),
     });
   }
