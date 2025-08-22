@@ -24,9 +24,18 @@ export async function createServer(): Promise<Server> {
       crossOriginResourcePolicy: { policy: 'cross-origin' },
     }),
   );
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
-  app.use(multer().any());
+  // Allow configuring request size limits via environment variables.
+  // Default to 10mb for JSON/urlencoded and 10 MB for multipart fields.
+  const REQUEST_LIMIT = process.env.REQUEST_LIMIT || '10mb';
+  const URLENCODED_LIMIT = process.env.URLENCODED_LIMIT || REQUEST_LIMIT;
+  const MULTER_FIELD_SIZE_MB = parseInt(process.env.MULTER_FIELD_SIZE_MB || '10', 10);
+  const MULTER_FIELD_SIZE = Number.isNaN(MULTER_FIELD_SIZE_MB) ? 10 * 1024 * 1024 : MULTER_FIELD_SIZE_MB * 1024 * 1024;
+
+  app.use(express.json({ limit: REQUEST_LIMIT }));
+  app.use(express.urlencoded({ extended: true, limit: URLENCODED_LIMIT }));
+  // Configure multer limits to avoid huge multipart payloads exhausting memory.
+  const upload = multer({ limits: { fieldSize: MULTER_FIELD_SIZE } });
+  app.use(upload.any());
   app.use(cookieParser());
   app.use(
     cors({
