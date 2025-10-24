@@ -1,5 +1,7 @@
 import * as dotenv from 'dotenv';
 import { DataSourceOptions } from 'typeorm';
+import { join } from 'path';
+
 dotenv.config();
 
 export const config: DataSourceOptions = {
@@ -10,8 +12,8 @@ export const config: DataSourceOptions = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   schema: process.env.DB_SCHEMA,
-  entities: [__dirname + '/src/entities/*.{js,ts}'],
-  migrations: [__dirname + '/src/database/migrations/*.{js,ts}'],
+  entities: [join(__dirname, 'src', 'entities', '*.{js,ts}')],
+  migrations: [join(__dirname, 'src', 'database', 'migrations', '*.{js,ts}')],
   synchronize: false,
 };
 
@@ -23,7 +25,7 @@ export const testConfig: DataSourceOptions = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   schema: 'test',
-  entities: [__dirname + '/src/entities/*.{js,ts}'],
-  migrations: [__dirname + 'src/database/migrations/*.{js,ts}'],
+  entities: [join(__dirname, 'src', 'entities', '*.{js,ts}')],
+  migrations: [join(__dirname, 'src', 'database', 'migrations', '*.{js,ts}')],
   synchronize: true,
 };
